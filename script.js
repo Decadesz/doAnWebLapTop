@@ -8,7 +8,7 @@ const products = {
           price: "21.990.000đ",
           oldPrice: "25.990.000đ",
           discount: "-15%",
-          images: ["images/1.png", "images/4.png", "images/5.png"],
+          images: ["images/asus1.png", "images/asus2.jpg", "images/asus3.jpg"],
           specs: [
             ["CPU", "Intel Core i7-12650H (12 nhân / 16 luồng, Max 4.7GHz)"],
             ["RAM", "16GB DDR5 4800MHz (2 khe, tối đa 32GB)"],
@@ -25,7 +25,7 @@ const products = {
           price: "24.500.000đ",
           oldPrice: "27.990.000đ",
           discount: "-12%",
-          images: ["images/2.jpg", "images/5.png"],
+          images: ["images/MB1.png", "images/MB2.jpeg", "images/MB3.jpeg"],
           specs: [
             ["CPU", "Apple M2 (8 nhân CPU, 8 nhân GPU)"],
             ["RAM", "8GB Unified Memory"],
@@ -41,7 +41,7 @@ const products = {
           price: "26.000.000đ",
           oldPrice: "29.990.000đ",
           discount: "-13%",
-          images: ["3.jpg", "7.png"],
+          images: ["images/dell1.webp", "images/dell2.webp", "images/dell3.webp"],
           specs: [
             ["CPU", "Intel Core i5-1240P (12 nhân, Max 4.4GHz)"],
             ["RAM", "16GB LPDDR5 5200MHz"],
@@ -57,7 +57,7 @@ const products = {
           price: "28.490.000đ",
           oldPrice: "32.000.000đ",
           discount: "-11%",
-          images: ["6.png", "8.png"],
+          images: ["images/lenovo1.webp", "images/lenovo2.webp", "images/lenovo3.webp"],
           specs: [
             ["CPU", "AMD Ryzen 7 7745HX (8 nhân / 16 luồng, Max 5.1GHz)"],
             ["RAM", "16GB DDR5 4800MHz"],
@@ -74,7 +74,7 @@ const products = {
           price: "89.000.000đ",
           oldPrice: "99.000.000đ",
           discount: "-10%",
-          images: ["4.png", "8.png"],
+          images: ["images/rog1.png", "images/rog2.png", "images/rog3.png"],
           specs: [
             ["CPU", "Intel Core Ultra 9 275HX (24 nhân, Max 5.4GHz)"],
             ["RAM", "64GB DDR5 SO-DIMM"],
