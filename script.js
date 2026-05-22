@@ -143,18 +143,18 @@ function loadProduct(id) {
   const thumbList = document.getElementById("thumbList");
   thumbList.innerHTML = "";
   p.images.forEach((src, i) => {
-    const img = document.createElement("img");
-    img.src = src;
-    img.alt = "Ảnh " + (i + 1);
+    const img = document.createElement("img"); // Tạo thẻ img mới
+    img.src = src; // Gán đường dẫn ảnh
+    img.alt = "Ảnh " + (i + 1); // Mặc định ảnh đầu tiên được active, khi click sẽ đổi ảnh chính và active thumbnail đó
     if (i === 0) img.classList.add("active");
     img.addEventListener("click", () => {
-      document.getElementById("mainImg").src = src;
+      document.getElementById("mainImg").src = src; // Đổi ảnh chính
       document
         .querySelectorAll(".thumb-list img")
         .forEach((t) => t.classList.remove("active"));
-      img.classList.add("active");
+      img.classList.add("active"); // Active thumbnail được click
     });
-    thumbList.appendChild(img);
+    thumbList.appendChild(img);  // Thêm thumbnail vào danh sách
   });
 
   // Render bảng specs ngắn
@@ -167,6 +167,7 @@ function loadProduct(id) {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
+// Hàm này nhận vào ID của bảng và mảng specs, sau đó tạo ra các hàng <tr><td>Key</td><td>Value</td></tr> và gán vào innerHTML của bảng đó.
 function renderSpecs(tableId, specs) {
   const table = document.getElementById(tableId);
   table.innerHTML = specs
@@ -195,6 +196,7 @@ function handleConsult() {
   showToast("💬 Nhân viên sẽ liên hệ tư vấn cho bạn!");
 }
 
+// Hàm showToast sử dụng Bootstrap Toast để hiển thị thông báo nhỏ ở góc dưới bên phải màn hình
 function showToast(msg) {
   const toastMsgEl = document.getElementById("toastMsg");
   const toastEl = document.getElementById("cartToast");
