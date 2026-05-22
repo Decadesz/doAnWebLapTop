@@ -95,6 +95,8 @@ const products = {
 // =============================================
 // BIẾN TOÀN CỤC
 // =============================================
+// Biến này sẽ lưu ID của sản phẩm đang được hiển thị trên trang chi tiết. Mặc định là 0 (sản phẩm đầu tiên) để tránh lỗi nếu người dùng vào trang mà không có ?id=...
+
 let currentProductId = 0;
 
 // Lấy số lượng giỏ hàng từ localStorage (nếu không có thì mặc định là 0)
