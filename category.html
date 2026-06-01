@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SV STORE - Danh Mục Laptop Gaming</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .breadcrumb-section {
+        background: #f8f9fa;
+        border-bottom: 1px solid #e9ecef;
+        padding: 10px 0;
+      }
+      .breadcrumb-item a {
+        color: #198754;
+        text-decoration: none;
+      }
+      .breadcrumb-item a:hover {
+        text-decoration: underline;
+      }
+
+      /* Bộ lọc bên trái */
+      .filter-card {
+        background: white;
+        border: 1px solid #e9ecef;
+        border-radius: 10px;
+      }
+      .filter-group-title {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 10px;
+      }
+
+      /* Thẻ sản phẩm */
+      .product-item-card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        transition:
+          transform 0.25s,
+          box-shadow 0.25s;
+        overflow: hidden;
+      }
+      .product-item-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+      }
+      .product-item-card img {
+        height: 180px;
+        object-fit: contain;
+        padding: 15px;
+        background: #fff;
+        border-bottom: 1px solid #f1f2f6;
+      }
+    </style>
+  </head>
+
+  <body class="bg-light">
+    <header class="sticky-top bg-white shadow-sm">
+      <nav class="navbar navbar-expand-lg navbar-light container">
+        <a class="navbar-brand text-success fw-bold fs-3" href="index.html"
+          >SV STORE</a
+        >
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto fw-semibold mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Trang chủ</a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link active text-success"
+                href="category.html?type=gaming"
+                >Laptop Gaming</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="category.html?type=office"
+                >Laptop Văn phòng</a
+              >
+            </li>
+          </ul>
+          <form
+            class="d-flex me-3 mb-2 mb-lg-0"
+            role="search"
+            action="search.html"
+          >
+            <input
+              class="form-control me-2"
+              type="search"
+              placeholder="Tìm tên laptop..."
+              name="q"
+            />
+            <button class="btn btn-outline-success flex-shrink-0" type="submit">
+              Tìm kiếm
+            </button>
+          </form>
+          <div class="d-flex gap-2">
+            <a href="#" class="btn btn-outline-secondary">Đăng nhập</a>
+            <a href="cart.html" class="btn btn-success position-relative">
+              Giỏ hàng
+              <span
+                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                id="cartBadge"
+                >0</span
+              >
+            </a>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="breadcrumb-section">
+        <div class="container">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 small">
+              <li class="breadcrumb-item">
+                <a href="index.html">Trang chủ</a>
+              </li>
+              <li class="breadcrumb-item"><a href="#">Laptop</a></li>
+              <li class="breadcrumb-item active">Laptop Gaming</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+
+      <section class="container my-4">
+        <div class="row g-4">
+          <aside class="col-12 col-lg-3">
+            <div class="filter-card bg-white p-4 shadow-sm">
+              <h5 class="fw-bold mb-3 border-bottom pb-2 text-success">
+                <i class="fa fa-filter me-2"></i>Bộ lọc sản phẩm
+              </h5>
+
+              <div class="mb-4">
+                <div class="filter-group-title">HÃNG SẢN XUẤT</div>
+                <div class="form-check mb-2">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="brandAsus"
+                    checked
+                  />
+                  <label class="form-check-label small" for="brandAsus"
+                    >ASUS</label
+                  >
+                </div>
+                <div class="form-check mb-2">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="brandLenovo"
+                  />
+                  <label class="form-check-label small" for="brandLenovo"
+                    >Lenovo</label
+                  >
+                </div>
+                <div class="form-check mb-2">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="brandDell"
+                  />
+                  <label class="form-check-label small" for="brandDell"
+                    >Dell</label
+                  >
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <div class="filter-group-title">MỨC GIÁ</div>
+                <div class="form-check mb-2">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="priceFilter"
+                    id="price1"
+                  />
+                  <label class="form-check-label small" for="price1"
+                    >Dưới 15 triệu</label
+                  >
+                </div>
+                <div class="form-check mb-2">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="priceFilter"
+                    id="price2"
+                  />
+                  <label class="form-check-label small" for="price2"
+                    >15 - 25 triệu</label
+                  >
+                </div>
+                <div class="form-check mb-2">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="priceFilter"
+                    id="price3"
+                    checked
+                  />
+                  <label class="form-check-label small" for="price3"
+                    >Trên 25 triệu</label
+                  >
+                </div>
+              </div>
+
+              <div class="mb-2">
+                <div class="filter-group-title">RAM</div>
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" id="ram8" />
+                  <label class="form-check-label small" for="ram8">8 GB</label>
+                </div>
+                <div class="form-check mb-2">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="ram16"
+                    checked
+                  />
+                  <label class="form-check-label small" for="ram16"
+                    >16 GB</label
+                  >
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          <div class="col-12 col-lg-9">
+            <div
+              class="bg-white p-3 rounded shadow-sm d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2 border border-light"
+            >
+              <h2 class="fs-5 fw-bold text-dark mb-0" id="categoryTitle">
+                Laptop Gaming
+              </h2>
+              <div class="d-flex align-items-center gap-2">
+                <span class="small text-muted text-nowrap">Sắp xếp:</span>
+                <select class="form-select form-select-sm">
+                  <option selected>Giá từ thấp đến cao</option>
+                  <option>Giá từ cao đến thấp</option>
+                  <option>Mới nhất</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row g-4" id="categoryList"></div>
+
+            <nav class="mt-5">
+              <ul class="pagination justify-content-center">
+                <li class="page-item disabled">
+                  <a class="page-link" href="#"
+                    ><i class="fa fa-angle-left"></i
+                  ></a>
+                </li>
+                <li class="page-item active">
+                  <a
+                    class="page-link bg-success border-success text-white"
+                    href="#"
+                    >1</a
+                  >
+                </li>
+                <li class="page-item">
+                  <a class="page-link text-success" href="#">2</a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link text-success" href="#"
+                    ><i class="fa fa-angle-right"></i
+                  ></a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="bg-dark text-light pt-5 pb-3">
+      <div class="container">
+        <div class="row g-4 mb-4">
+          <div class="col-12 col-md-6">
+            <h4 class="text-success fw-bold mb-3">SV STORE</h4>
+            <p class="text-secondary">
+              Hệ thống bán lẻ laptop sinh viên chính hãng, giá tốt nhất.
+            </p>
+          </div>
+          <div class="col-12 col-md-6">
+            <h4 class="text-success fw-bold mb-3">Liên hệ</h4>
+            <p class="mb-1">📍 Địa chỉ: Khu vực Thuận An, Bình Dương</p>
+            <p class="mb-1">📞 Hotline: 1900 xxxx</p>
+            <p class="mb-0">✉️ Email: cskh@svstore.vn</p>
+          </div>
+        </div>
+        <div
+          class="text-center text-secondary border-top border-secondary pt-3 mt-3"
+        >
+          <p class="mb-0">&copy; 2026 SV STORE. Đồ án môn học.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/script.js"></script>
+  </body>
+</html>

@@ -8,12 +8,51 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <link rel="stylesheet" href="style.css" />
 
     <style>
-      /* Chỉ giữ lại CSS cho màu nền gradient của Banner vì Bootstrap không có sẵn màu này */
       .banner-custom {
         background: linear-gradient(135deg, #2f3542, #57606f);
+      }
+
+      /* ===== CSS CHO SLIDER SẢN PHẨM ===== */
+      /* Ẩn thanh cuộn mặc định của trình duyệt cho đẹp */
+      .slider-container::-webkit-scrollbar {
+        display: none;
+      }
+      .slider-container {
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+        scroll-behavior: smooth;
+        scroll-snap-type: x mandatory;
+      }
+      /* Bọc cố định chiều rộng cho từng sản phẩm trong slider */
+      .product-card-wrapper {
+        flex: 0 0 auto;
+        width: 280px;
+        scroll-snap-align: start;
+      }
+      /* Style cho 2 nút lướt trái/phải */
+      .btn-slider {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: white;
+        border: 1px solid #198754;
+        color: #198754;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: all 0.2s;
+      }
+      .btn-slider:hover {
+        background-color: #198754;
+        color: white;
       }
     </style>
   </head>
@@ -21,7 +60,6 @@
     <header class="sticky-top bg-white shadow-sm">
       <nav class="navbar navbar-expand-lg navbar-light container">
         <a class="navbar-brand text-success fw-bold fs-3" href="#">SV STORE</a>
-
         <button
           class="navbar-toggler"
           type="button"
@@ -30,22 +68,26 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav me-auto fw-semibold mb-2 mb-lg-0">
             <li class="nav-item">
               <a class="nav-link active text-success" href="#">Trang chủ</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Laptop Gaming</a>
+              <a class="nav-link" href="category.html?type=gaming"
+                >Laptop Gaming</a
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Laptop Văn phòng</a>
+              <a class="nav-link" href="category.html?type=office"
+                >Laptop Văn phòng</a
+              >
             </li>
           </ul>
 
-          <form class="d-flex me-3 mb-2 mb-lg-0" role="search">
+          <form id="searchForm" class="d-flex me-3 mb-2 mb-lg-0" role="search">
             <input
+              id="searchInput"
               class="form-control me-2"
               type="search"
               placeholder="Tìm tên laptop..."
@@ -58,7 +100,7 @@
 
           <div class="d-flex gap-2">
             <a href="#" class="btn btn-outline-secondary"> Đăng nhập </a>
-            <a href="#" class="btn btn-success position-relative">
+            <a href="cart.html" class="btn btn-success position-relative">
               Giỏ hàng
               <span
                 id="cartBadge"
@@ -86,33 +128,50 @@
       </section>
 
       <section class="products container mt-4 mb-5">
-        <h3
-          class="border-bottom border-success border-2 pb-2 mb-4 d-inline-block"
-        >
-          Laptop Nổi Bật
-        </h3>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h3
+            class="border-bottom border-success border-2 pb-2 mb-0 d-inline-block"
+          >
+            Laptop Nổi Bật
+          </h3>
+          <div class="d-flex gap-2">
+            <button class="btn-slider" id="btnScrollLeft">
+              <i class="fa fa-chevron-left"></i>
+            </button>
+            <button class="btn-slider" id="btnScrollRight">
+              <i class="fa fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
 
-        <div class="row g-4">
-          <div class="col-12 col-md-6 col-lg-3">
+        <div
+          class="d-flex gap-4 slider-container pb-2"
+          id="productSlider"
+          style="overflow-x: auto"
+        >
+          <div class="product-card-wrapper">
             <article class="card h-100 shadow-sm border-0 position-relative">
               <span
                 class="position-absolute top-0 end-0 badge bg-danger m-2 shadow-sm"
                 >HOT</span
               >
-              <a href="chitietsanpham.html?id=0" style="text-decoration: none; color: inherit;">
-                      <img
-                     src="/images/asus1.png"
-                    alt="ASUS TUF Dash F15"
-                    class="card-img-top border-bottom"
-                      />
-                  </a>
-           
-
+              <a
+                href="chitietsanpham.html?id=ASUS TUF Dash F15 (FX517ZC-HN079W)"
+                style="text-decoration: none; color: inherit"
+              >
+                <img
+                  src="/images/asus1.png"
+                  alt="ASUS TUF Dash F15"
+                  class="card-img-top border-bottom p-3"
+                  style="height: 180px; object-fit: contain"
+                />
+              </a>
               <div class="card-body d-flex flex-column">
                 <h4 class="card-title fs-6 fw-bold text-dark">
-                
-              
-                  <a href="chitietsanpham.html?id=0" style="text-decoration: none; color: inherit;">
+                  <a
+                    href="chitietsanpham.html?id=ASUS TUF Dash F15 (FX517ZC-HN079W)"
+                    style="text-decoration: none; color: inherit"
+                  >
                     ASUS TUF Dash F15
                   </a>
                 </h4>
@@ -123,7 +182,10 @@
                   class="mt-auto d-flex justify-content-between align-items-center"
                 >
                   <span class="text-danger fw-bold">21.990.000đ</span>
-                  <button class="btn btn-success btn-sm fw-bold" onclick="handleBuyNow()">
+                  <button
+                    class="btn btn-success btn-sm fw-bold"
+                    onclick="handleBuyNow()"
+                  >
                     Mua ngay
                   </button>
                 </div>
@@ -131,20 +193,25 @@
             </article>
           </div>
 
-          <div class="col-12 col-md-6 col-lg-3">
+          <div class="product-card-wrapper">
             <article class="card h-100 shadow-sm border-0 position-relative">
-               <a href="chitietsanpham.html?id=1" style="text-decoration: none; color: inherit;">
-                       <img
-                src="/images/MB1.png"
-                alt="MacBook Air M2"
-                class="card-img-top border-bottom"
-              />
-                  </a>
-           
+              <a
+                href="chitietsanpham.html?id=MacBook Air M2 (2023)"
+                style="text-decoration: none; color: inherit"
+              >
+                <img
+                  src="/images/MB1.png"
+                  alt="MacBook Air M2"
+                  class="card-img-top border-bottom p-3"
+                  style="height: 180px; object-fit: contain"
+                />
+              </a>
               <div class="card-body d-flex flex-column">
                 <h4 class="card-title fs-6 fw-bold text-dark">
-               
-                  <a href="chitietsanpham.html?id=1" style="text-decoration: none; color: inherit;">
+                  <a
+                    href="chitietsanpham.html?id=MacBook Air M2 (2023)"
+                    style="text-decoration: none; color: inherit"
+                  >
                     Macbook Air M2
                   </a>
                 </h4>
@@ -155,7 +222,10 @@
                   class="mt-auto d-flex justify-content-between align-items-center"
                 >
                   <span class="text-danger fw-bold">24.500.000đ</span>
-                  <button class="btn btn-success btn-sm fw-bold" onclick="handleBuyNow()">
+                  <button
+                    class="btn btn-success btn-sm fw-bold"
+                    onclick="handleBuyNow()"
+                  >
                     Mua ngay
                   </button>
                 </div>
@@ -163,23 +233,29 @@
             </article>
           </div>
 
-          <div class="col-12 col-md-6 col-lg-3">
+          <div class="product-card-wrapper">
             <article class="card h-100 shadow-sm border-0 position-relative">
               <span
                 class="position-absolute top-0 end-0 badge bg-danger m-2 shadow-sm"
                 >-15%</span
               >
-               <a href="chitietsanpham.html?id=2" style="text-decoration: none; color: inherit;">
-                    <img
-                src="/images/dell1.webp"
-                alt="Dell XPS 13"
-                class="card-img-top border-bottom"
-              />
-                  </a>
-             
+              <a
+                href="chitietsanpham.html?id=Dell XPS 13 Plus (9320)"
+                style="text-decoration: none; color: inherit"
+              >
+                <img
+                  src="/images/dell1.webp"
+                  alt="Dell XPS 13"
+                  class="card-img-top border-bottom p-3"
+                  style="height: 180px; object-fit: contain"
+                />
+              </a>
               <div class="card-body d-flex flex-column">
                 <h4 class="card-title fs-6 fw-bold text-dark">
-                  <a href="chitietsanpham.html?id=2" style="text-decoration: none; color: inherit;">
+                  <a
+                    href="chitietsanpham.html?id=Dell XPS 13 Plus (9320)"
+                    style="text-decoration: none; color: inherit"
+                  >
                     Dell XPS 13 Plus
                   </a>
                 </h4>
@@ -190,7 +266,10 @@
                   class="mt-auto d-flex justify-content-between align-items-center"
                 >
                   <span class="text-danger fw-bold">26.000.000đ</span>
-                  <button class="btn btn-success btn-sm fw-bold " onclick="handleBuyNow()">
+                  <button
+                    class="btn btn-success btn-sm fw-bold"
+                    onclick="handleBuyNow()"
+                  >
                     Mua ngay
                   </button>
                 </div>
@@ -198,19 +277,26 @@
             </article>
           </div>
 
-          <div class="col-12 col-md-6 col-lg-3">
+          <div class="product-card-wrapper">
             <article class="card h-100 shadow-sm border-0 position-relative">
-               <a href="chitietsanpham.html?id=3" style="text-decoration: none; color: inherit;">
-                    <img
-                src="/images/lenovo1.webp"
-                alt="Lenovo Legion 5"
-                class="card-img-top border-bottom"
-              />
+              <a
+                href="chitietsanpham.html?id=Lenovo Legion 5 Gen 8 (2023)"
+                style="text-decoration: none; color: inherit"
+              >
+                <img
+                  src="/images/lenovo1.webp"
+                  alt="Lenovo Legion 5"
+                  class="card-img-top border-bottom p-3"
+                  style="height: 180px; object-fit: contain"
+                />
+              </a>
               <div class="card-body d-flex flex-column">
                 <h4 class="card-title fs-6 fw-bold text-dark">
-                
-                   <a href="chitietsanpham.html?id=3" style="text-decoration: none; color: inherit;">
-                     Lenovo Legion 5
+                  <a
+                    href="chitietsanpham.html?id=Lenovo Legion 5 Gen 8 (2023)"
+                    style="text-decoration: none; color: inherit"
+                  >
+                    Lenovo Legion 5
                   </a>
                 </h4>
                 <p class="card-text text-muted small mb-3">
@@ -220,7 +306,50 @@
                   class="mt-auto d-flex justify-content-between align-items-center"
                 >
                   <span class="text-danger fw-bold">28.490.000đ</span>
-                  <button class="btn btn-success btn-sm fw-bold" onclick="handleBuyNow()">
+                  <button
+                    class="btn btn-success btn-sm fw-bold"
+                    onclick="handleBuyNow()"
+                  >
+                    Mua ngay
+                  </button>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div class="product-card-wrapper">
+            <article class="card h-100 shadow-sm border-0 position-relative">
+              <a
+                href="chitietsanpham.html?id=ROG Strix SCAR 18 (2025)"
+                style="text-decoration: none; color: inherit"
+              >
+                <img
+                  src="/images/rog1.png"
+                  alt="ROG Strix"
+                  class="card-img-top border-bottom p-3"
+                  style="height: 180px; object-fit: contain"
+                />
+              </a>
+              <div class="card-body d-flex flex-column">
+                <h4 class="card-title fs-6 fw-bold text-dark">
+                  <a
+                    href="chitietsanpham.html?id=ROG Strix SCAR 18 (2025)"
+                    style="text-decoration: none; color: inherit"
+                  >
+                    ROG Strix SCAR 18
+                  </a>
+                </h4>
+                <p class="card-text text-muted small mb-3">
+                  Ultra 9, RTX 5080, RAM 64GB
+                </p>
+                <div
+                  class="mt-auto d-flex justify-content-between align-items-center"
+                >
+                  <span class="text-danger fw-bold">89.000.000đ</span>
+                  <button
+                    class="btn btn-success btn-sm fw-bold"
+                    onclick="handleBuyNow()"
+                  >
                     Mua ngay
                   </button>
                 </div>
@@ -255,16 +384,47 @@
       </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="script.js"></script>
     <div class="toast-container position-fixed bottom-0 end-0 p-3">
-  <div id="cartToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="d-flex">
-      <div class="toast-body" id="toastMsg">
+      <div
+        id="cartToast"
+        class="toast align-items-center text-bg-success border-0"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+      >
+        <div class="d-flex">
+          <div class="toast-body" id="toastMsg"></div>
+          <button
+            type="button"
+            class="btn-close btn-close-white me-2 m-auto"
+            data-bs-dismiss="toast"
+            aria-label="Close"
+          ></button>
         </div>
-      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
     </div>
-  </div>
-</div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/script.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const slider = document.getElementById("productSlider");
+        const scrollAmount = 300; // Chiều dài cuộn sau mỗi lần bấm (px)
+
+        document
+          .getElementById("btnScrollLeft")
+          .addEventListener("click", function () {
+            slider.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+          });
+
+        document
+          .getElementById("btnScrollRight")
+          .addEventListener("click", function () {
+            slider.scrollBy({ left: scrollAmount, behavior: "smooth" });
+          });
+      });
+    </script>
   </body>
 </html>
