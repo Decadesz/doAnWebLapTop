@@ -121,7 +121,127 @@ function getProductIdFromURL() {
   const id = params.get("id");
   return id; // Trả về nguyên bản chuỗi chữ, không dùng parseInt nữa
 }
+// RENDER TRANG GIỎ HÀNG (cart.html)
+// =============================================
+function loadCartPage() {
+  const tbody = document.getElementById("cartTableBody");
+  const subtotalEl = document.getElementById("cartSubtotal");
+  const totalEl = document.getElementById("cartTotal");
+  if (!tbody) return;
 
+  const cart = getCart();
+  tbody.innerHTML = ""; // Xóa dữ liệu tĩnh cũ
+  let totalMoney = 0;
+
+  if (cart.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-muted">Giỏ hàng của bạn đang trống!</td></tr>`;
+    subtotalEl.textContent = "0đ";
+    totalEl.textContent = "0đ";
+    return;
+  }
+
+  cart.forEach((item, index) => {
+    const product = products[item.id];
+    if (product) {
+      const itemPrice = parsePrice(product.price);
+      const itemTotal = itemPrice * item.qty;
+      totalMoney += itemTotal;
+
+      tbody.innerHTML += `
+        <tr>
+          <td>
+            <div class="d-flex align-items-center gap-3">
+              <img src="${product.images[0]}" class="cart-item-img">
+              <div>
+                <a href="chitietsanpham.html?id=${encodeURIComponent(item.id)}" class="text-dark fw-bold text-decoration-none">${product.name}</a>
+                <p class="text-muted small mb-0">${product.specs[0][1]}</p>
+              </div>
+            </div>
+          </td>
+          <td class="fw-semibold">${product.price}</td>
+          <td>
+            <div class="input-group input-group-sm w-75">
+              <button class="btn btn-outline-secondary" onclick="updateQty(${index}, -1)">-</button>
+              <input type="text" class="form-control qty-input" value="${item.qty}" readonly>
+              <button class="btn btn-outline-secondary" onclick="updateQty(${index}, 1)">+</button>
+            </div>
+          </td>
+          <td class="fw-bold text-danger">${formatPrice(itemTotal)}</td>
+          <td>
+            <button class="btn btn-sm btn-outline-danger" onclick="removeItem(${index})"><i class="fa fa-trash"></i></button>
+          </td>
+        </tr>
+      `;
+    }
+  });
+
+  subtotalEl.textContent = formatPrice(totalMoney);
+  totalEl.textContent = formatPrice(totalMoney);
+}
+
+// Hàm cập nhật số lượng (+ / -)
+function updateQty(index, change) {
+  const cart = getCart();
+  if (cart[index]) {
+    cart[index].qty += change;
+    if (cart[index].qty <= 0) {
+      cart.splice(index, 1); // Xóa nếu số lượng = 0
+    }
+    saveCart(cart);
+    loadCartPage(); // Render lại bảng
+  }
+}
+
+// Hàm xóa hẳn sản phẩm
+function removeItem(index) {
+  const cart = getCart();
+  cart.splice(index, 1);
+  saveCart(cart);
+  loadCartPage();
+}
+
+// =============================================
+// RENDER TRANG THANH TOÁN (checkout.html)
+// =============================================
+function loadCheckoutPage() {
+  const listContainer = document.getElementById("checkoutItemList");
+  const subtotalEl = document.getElementById("checkoutSubtotal");
+  const totalEl = document.getElementById("checkoutTotal");
+  const titleEl = document.getElementById("checkoutTitle");
+  if (!listContainer) return;
+
+  const cart = getCart();
+  listContainer.innerHTML = "";
+  let totalMoney = 0;
+  let totalItems = 0;
+
+  cart.forEach((item) => {
+    const product = products[item.id];
+    if (product) {
+      const itemPrice = parsePrice(product.price);
+      const itemTotal = itemPrice * item.qty;
+      totalMoney += itemTotal;
+      totalItems += item.qty;
+
+      listContainer.innerHTML += `
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="d-flex align-items-center gap-3">
+            <img src="${product.images[0]}" class="product-mini-img">
+            <div>
+              <h6 class="mb-0 fw-semibold text-truncate" style="max-width: 180px;">${product.name}</h6>
+              <small class="text-muted">SL: ${item.qty}</small>
+            </div>
+          </div>
+          <span class="fw-semibold small">${formatPrice(itemTotal)}</span>
+        </div>
+      `;
+    }
+  });
+
+  titleEl.textContent = `Đơn hàng của bạn (${totalItems} sản phẩm)`;
+  subtotalEl.textContent = formatPrice(totalMoney);
+  totalEl.textContent = formatPrice(totalMoney);
+}
 // =============================================
 // RENDER TRANG CHI TIẾT
 // =============================================
@@ -180,18 +300,64 @@ function renderSpecs(tableId, specs) {
 // =============================================
 // GIỎ HÀNG
 // =============================================
-function addToCart() {
-  cartCount++;
-  localStorage.setItem("myCartCount", cartCount); // Lưu số mới vào bộ nhớ
-  updateCartBadge(); // Cập nhật lại con số trên màn hình
+// Hàm hỗ trợ: Biến chuỗi "21.990.000đ" thành số nguyên 21990000 để cộng trừ
+function parsePrice(priceStr) {
+  return parseInt(priceStr.replace(/\D/g, ""));
+}
+
+// Hàm hỗ trợ: Biến số nguyên 21990000 thành chuỗi "21.990.000đ"
+function formatPrice(priceNum) {
+  return priceNum.toLocaleString("vi-VN") + "đ";
+}
+
+// Lấy giỏ hàng từ LocalStorage (nếu chưa có thì tạo mảng rỗng [])
+function getCart() {
+  return JSON.parse(localStorage.getItem("myCart")) || [];
+}
+
+// Lưu giỏ hàng xuống LocalStorage
+function saveCart(cart) {
+  localStorage.setItem("myCart", JSON.stringify(cart));
+  updateCartBadge(); // Lưu xong thì cập nhật số lượng trên icon menu luôn
+}
+
+// Cập nhật con số trên huy hiệu giỏ hàng (tổng số lượng sản phẩm)
+function updateCartBadge() {
+  const cart = getCart();
+  const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+  const badge = document.getElementById("cartBadge");
+  if (badge) {
+    badge.textContent = totalItems;
+  }
+}
+
+// Hàm thêm sản phẩm vào giỏ
+function addToCart(productId) {
+  if (!productId) return;
+  const cart = getCart();
+
+  // Kiểm tra xem sản phẩm đã có trong giỏ chưa
+  const existingItem = cart.find((item) => item.id === productId);
+  if (existingItem) {
+    existingItem.qty += 1; // Có rồi thì tăng số lượng
+  } else {
+    cart.push({ id: productId, qty: 1 }); // Chưa có thì thêm mới
+  }
+
+  saveCart(cart);
   showToast("✅ Đã thêm vào giỏ hàng!");
 }
 
-function handleBuyNow() {
-  cartCount++;
-  localStorage.setItem("myCartCount", cartCount); // Lưu số mới vào bộ nhớ
-  updateCartBadge(); // Cập nhật lại con số trên màn hình
-  showToast("🛒 Đang chuyển đến thanh toán...");
+// Hàm ấn Mua Ngay (Thêm vào giỏ rồi nhảy sang trang Giỏ hàng)
+function handleBuyNow(productId) {
+  if (!productId) {
+    // Nếu ở trang chi tiết mà không truyền id, tự lấy currentProductId
+    productId = currentProductId;
+  }
+
+  addToCart(productId);
+  // Chuyển hướng sang trang giỏ hàng
+  window.location.href = "cart.html";
 }
 
 function handleConsult() {
@@ -242,6 +408,14 @@ document.addEventListener("DOMContentLoaded", () => {
   if (document.getElementById("productName")) {
     const id = getProductIdFromURL();
     loadProduct(id);
+  }
+  // MỚI: Nếu đang ở trang Giỏ hàng thì render bảng giỏ hàng
+  if (document.getElementById("cartTableBody")) {
+    loadCartPage();
+  }
+  // MỚI: Nếu đang ở trang Thanh toán thì render list tóm tắt
+  if (document.getElementById("checkoutItemList")) {
+    loadCheckoutPage();
   }
   // Kiểm tra nếu đang ở trang search.html thì chạy hàm lọc kết quả
   if (
@@ -337,7 +511,7 @@ function loadSearchResults() {
                   ${p.specs[0][1]} </p>
                 <div class="mt-auto d-flex justify-content-between align-items-center">
                   <span class="text-danger fw-bold">${p.price}</span>
-                  <button class="btn btn-success btn-sm fw-bold" onclick="handleBuyNow()">Mua ngay</button>
+                  <button class="btn btn-success btn-sm fw-bold" onclick="handleBuyNow('${p.id}')">Mua ngay</button>
                 </div>
               </div>
             </article>
@@ -398,7 +572,7 @@ function loadCategoryResults() {
               </p>
               <div class="mt-auto d-flex justify-content-between align-items-center">
                 <span class="text-danger fw-bold">${product.price}</span>
-                <button class="btn btn-success btn-sm fw-bold" onclick="handleBuyNow()">Mua ngay</button>
+                <button class="btn btn-success btn-sm fw-bold" onclick="handleBuyNow('${key}')">Mua ngay</button>
               </div>
             </div>
           </article>
