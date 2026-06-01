@@ -1,16 +1,15 @@
 // =============================================
-// DỮ LIỆU SẢN PHẨM (giả lập database bằng JS)
+// DỮ LIỆU SẢN PHẨM (Đã Việt hóa key)
 // =============================================
-
-const products = {
+const danhSachSanPham = {
   "ASUS TUF Dash F15 (FX517ZC-HN079W)": {
-    name: "ASUS TUF Dash F15 (FX517ZC-HN079W)",
-    type: "gaming",
-    price: "21.990.000đ",
-    oldPrice: "25.990.000đ",
-    discount: "-15%",
-    images: ["images/asus1.png", "images/asus2.jpg", "images/asus3.jpg"],
-    specs: [
+    ten: "ASUS TUF Dash F15 (FX517ZC-HN079W)",
+    loai: "gaming",
+    gia: "21.990.000đ",
+    giaCu: "25.990.000đ",
+    giamGia: "-15%",
+    hinhAnh: ["images/asus1.png", "images/asus2.jpg", "images/asus3.jpg"],
+    thongSo: [
       ["CPU", "Intel Core i7-12650H (12 nhân / 16 luồng, Max 4.7GHz)"],
       ["RAM", "16GB DDR5 4800MHz (2 khe, tối đa 32GB)"],
       ["Card đồ họa", "NVIDIA GeForce RTX 3050Ti 4GB GDDR6"],
@@ -22,13 +21,13 @@ const products = {
     ],
   },
   "MacBook Air M2 (2023)": {
-    name: "MacBook Air M2 (2023)",
-    type: "office",
-    price: "24.500.000đ",
-    oldPrice: "27.990.000đ",
-    discount: "-12%",
-    images: ["images/MB1.png", "images/MB2.jpeg", "images/MB3.jpeg"],
-    specs: [
+    ten: "MacBook Air M2 (2023)",
+    loai: "office",
+    gia: "24.500.000đ",
+    giaCu: "27.990.000đ",
+    giamGia: "-12%",
+    hinhAnh: ["images/MB1.png", "images/MB2.jpeg", "images/MB3.jpeg"],
+    thongSo: [
       ["CPU", "Apple M2 (8 nhân CPU, 8 nhân GPU)"],
       ["RAM", "8GB Unified Memory"],
       ["Màn hình", "13.6 inch Liquid Retina, 2560x1664, 500 nits"],
@@ -39,13 +38,13 @@ const products = {
     ],
   },
   "Dell XPS 13 Plus (9320)": {
-    name: "Dell XPS 13 Plus (9320)",
-    type: "office",
-    price: "26.000.000đ",
-    oldPrice: "29.990.000đ",
-    discount: "-13%",
-    images: ["images/dell1.webp", "images/dell2.webp", "images/dell3.webp"],
-    specs: [
+    ten: "Dell XPS 13 Plus (9320)",
+    loai: "office",
+    gia: "26.000.000đ",
+    giaCu: "29.990.000đ",
+    giamGia: "-13%",
+    hinhAnh: ["images/dell1.webp", "images/dell2.webp", "images/dell3.webp"],
+    thongSo: [
       ["CPU", "Intel Core i5-1240P (12 nhân, Max 4.4GHz)"],
       ["RAM", "16GB LPDDR5 5200MHz"],
       ["Màn hình", "13.4 inch OLED FHD+ (1920x1200), 400 nits"],
@@ -56,17 +55,17 @@ const products = {
     ],
   },
   "Lenovo Legion 5 Gen 8 (2023)": {
-    name: "Lenovo Legion 5 Gen 8 (2023)",
-    type: "gaming",
-    price: "28.490.000đ",
-    oldPrice: "32.000.000đ",
-    discount: "-11%",
-    images: [
+    ten: "Lenovo Legion 5 Gen 8 (2023)",
+    loai: "gaming",
+    gia: "28.490.000đ",
+    giaCu: "32.000.000đ",
+    giamGia: "-11%",
+    hinhAnh: [
       "images/lenovo1.webp",
       "images/lenovo2.webp",
       "images/lenovo3.webp",
     ],
-    specs: [
+    thongSo: [
       ["CPU", "AMD Ryzen 7 7745HX (8 nhân / 16 luồng, Max 5.1GHz)"],
       ["RAM", "16GB DDR5 4800MHz"],
       ["Card đồ họa", "NVIDIA GeForce RTX 4060 8GB GDDR6"],
@@ -78,13 +77,13 @@ const products = {
     ],
   },
   "ROG Strix SCAR 18 (2025)": {
-    name: "ROG Strix SCAR 18 (2025)",
-    type: "gaming",
-    price: "89.000.000đ",
-    oldPrice: "99.000.000đ",
-    discount: "-10%",
-    images: ["images/rog1.png", "images/rog2.png", "images/rog3.png"],
-    specs: [
+    ten: "ROG Strix SCAR 18 (2025)",
+    loai: "gaming",
+    gia: "89.000.000đ",
+    giaCu: "99.000.000đ",
+    giamGia: "-10%",
+    hinhAnh: ["images/rog1.png", "images/rog2.png", "images/rog3.png"],
+    thongSo: [
       ["CPU", "Intel Core Ultra 9 275HX (24 nhân, Max 5.4GHz)"],
       ["RAM", "64GB DDR5 SO-DIMM"],
       ["Card đồ họa", "NVIDIA GeForce RTX 5080 16GB GDDR7"],
@@ -98,499 +97,467 @@ const products = {
 };
 
 // =============================================
-// BIẾN TOÀN CỤC
+// BIẾN TOÀN CỤC & HÀM TIỆN ÍCH
 // =============================================
-let currentProductId = 0;
+let idSanPhamHienTai = 0;
 
-// Lấy số lượng giỏ hàng từ localStorage (nếu không có thì mặc định là 0)
-let cartCount = parseInt(localStorage.getItem("myCartCount")) || 0;
+function capNhatHuyHieuGioHang() {
+  const gioHang = layDuLieuGioHang();
+  const tongSoLuong = gioHang.reduce(
+    (tong, monHang) => tong + monHang.soLuong,
+    0,
+  );
+  const huyHieu = document.getElementById("cartBadge");
+  if (huyHieu) {
+    huyHieu.textContent = tongSoLuong;
+  }
+}
 
-// Hàm hỗ trợ: Cập nhật con số lên huy hiệu (badge) giỏ hàng
-function updateCartBadge() {
-  const badge = document.getElementById("cartBadge");
-  if (badge) {
-    badge.textContent = cartCount;
+function layIdSanPhamTuURL() {
+  const thamSo = new URLSearchParams(window.location.search);
+  return thamSo.get("id");
+}
+
+function chuyenGiaThanhSo(chuoiGia) {
+  return parseInt(chuoiGia.replace(/\D/g, ""));
+}
+
+function dinhDangGiaTien(soTien) {
+  return soTien.toLocaleString("vi-VN") + "đ";
+}
+
+// =============================================
+// QUẢN LÝ GIỎ HÀNG
+// =============================================
+function layDuLieuGioHang() {
+  return JSON.parse(localStorage.getItem("gioHangCuaToi")) || [];
+}
+
+function luuDuLieuGioHang(gioHang) {
+  localStorage.setItem("gioHangCuaToi", JSON.stringify(gioHang));
+  capNhatHuyHieuGioHang();
+}
+
+function themVaoGioHang(idSanPham) {
+  if (!idSanPham) return;
+  const gioHang = layDuLieuGioHang();
+
+  const monHangDaCo = gioHang.find((monHang) => monHang.id === idSanPham);
+  if (monHangDaCo) {
+    monHangDaCo.soLuong += 1;
+  } else {
+    gioHang.push({ id: idSanPham, soLuong: 1 });
+  }
+
+  luuDuLieuGioHang(gioHang);
+  hienThiThongBao("✅ Đã thêm vào giỏ hàng!");
+}
+
+function capNhatSoLuongSanPham(viTri, thayDoi) {
+  const gioHang = layDuLieuGioHang();
+  if (gioHang[viTri]) {
+    gioHang[viTri].soLuong += thayDoi;
+    if (gioHang[viTri].soLuong <= 0) {
+      gioHang.splice(viTri, 1);
+    }
+    luuDuLieuGioHang(gioHang);
+    taiTrangGioHang();
+  }
+}
+
+function xoaSanPhamKhoiGio(viTri) {
+  const gioHang = layDuLieuGioHang();
+  gioHang.splice(viTri, 1);
+  luuDuLieuGioHang(gioHang);
+  taiTrangGioHang();
+}
+
+function xuLyMuaNgay(idSanPham) {
+  if (!idSanPham) {
+    idSanPham = idSanPhamHienTai;
+  }
+  themVaoGioHang(idSanPham);
+  window.location.href = "cart.html";
+}
+
+function xuLyTuVan() {
+  hienThiThongBao("💬 Nhân viên sẽ liên hệ tư vấn cho bạn!");
+}
+
+function hienThiThongBao(noiDung) {
+  const phanTuNoiDung = document.getElementById("toastMsg");
+  const phanTuThongBao = document.getElementById("cartToast");
+
+  if (phanTuNoiDung && phanTuThongBao) {
+    phanTuNoiDung.textContent = noiDung;
+    const thongBao = new bootstrap.Toast(phanTuThongBao, { delay: 2500 });
+    thongBao.show();
   }
 }
 
 // =============================================
-// LẤY ID SẢN PHẨM TỪ URL (VD: ?id=1)
+// RENDER CÁC TRANG
 // =============================================
-function getProductIdFromURL() {
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get("id");
-  return id; // Trả về nguyên bản chuỗi chữ, không dùng parseInt nữa
-}
-// RENDER TRANG GIỎ HÀNG (cart.html)
-// =============================================
-function loadCartPage() {
-  const tbody = document.getElementById("cartTableBody");
-  const subtotalEl = document.getElementById("cartSubtotal");
-  const totalEl = document.getElementById("cartTotal");
-  if (!tbody) return;
+function taiTrangGioHang() {
+  const thanBang = document.getElementById("cartTableBody");
+  const phanTuTamTinh = document.getElementById("cartSubtotal");
+  const phanTuTongTien = document.getElementById("cartTotal");
+  if (!thanBang) return;
 
-  const cart = getCart();
-  tbody.innerHTML = ""; // Xóa dữ liệu tĩnh cũ
-  let totalMoney = 0;
+  const gioHang = layDuLieuGioHang();
+  thanBang.innerHTML = "";
+  let tongTien = 0;
 
-  if (cart.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-muted">Giỏ hàng của bạn đang trống!</td></tr>`;
-    subtotalEl.textContent = "0đ";
-    totalEl.textContent = "0đ";
+  if (gioHang.length === 0) {
+    thanBang.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-muted">Giỏ hàng của bạn đang trống!</td></tr>`;
+    phanTuTamTinh.textContent = "0đ";
+    phanTuTongTien.textContent = "0đ";
     return;
   }
 
-  cart.forEach((item, index) => {
-    const product = products[item.id];
-    if (product) {
-      const itemPrice = parsePrice(product.price);
-      const itemTotal = itemPrice * item.qty;
-      totalMoney += itemTotal;
+  gioHang.forEach((monHang, viTri) => {
+    const sanPham = danhSachSanPham[monHang.id];
+    if (sanPham) {
+      const giaTien = chuyenGiaThanhSo(sanPham.gia);
+      const tienTungMon = giaTien * monHang.soLuong;
+      tongTien += tienTungMon;
 
-      tbody.innerHTML += `
+      thanBang.innerHTML += `
         <tr>
           <td>
             <div class="d-flex align-items-center gap-3">
-              <img src="${product.images[0]}" class="cart-item-img">
+              <img src="${sanPham.hinhAnh[0]}" class="cart-item-img">
               <div>
-                <a href="chitietsanpham.html?id=${encodeURIComponent(item.id)}" class="text-dark fw-bold text-decoration-none">${product.name}</a>
-                <p class="text-muted small mb-0">${product.specs[0][1]}</p>
+                <a href="chitietsanpham.html?id=${encodeURIComponent(monHang.id)}" class="text-dark fw-bold text-decoration-none">${sanPham.ten}</a>
+                <p class="text-muted small mb-0">${sanPham.thongSo[0][1]}</p>
               </div>
             </div>
           </td>
-          <td class="fw-semibold">${product.price}</td>
+          <td class="fw-semibold">${sanPham.gia}</td>
           <td>
             <div class="input-group input-group-sm w-75">
-              <button class="btn btn-outline-secondary" onclick="updateQty(${index}, -1)">-</button>
-              <input type="text" class="form-control qty-input" value="${item.qty}" readonly>
-              <button class="btn btn-outline-secondary" onclick="updateQty(${index}, 1)">+</button>
+              <button class="btn btn-outline-secondary" onclick="capNhatSoLuongSanPham(${viTri}, -1)">-</button>
+              <input type="text" class="form-control qty-input" value="${monHang.soLuong}" readonly>
+              <button class="btn btn-outline-secondary" onclick="capNhatSoLuongSanPham(${viTri}, 1)">+</button>
             </div>
           </td>
-          <td class="fw-bold text-danger">${formatPrice(itemTotal)}</td>
+          <td class="fw-bold text-danger">${dinhDangGiaTien(tienTungMon)}</td>
           <td>
-            <button class="btn btn-sm btn-outline-danger" onclick="removeItem(${index})"><i class="fa fa-trash"></i></button>
+            <button class="btn btn-sm btn-outline-danger" onclick="xoaSanPhamKhoiGio(${viTri})"><i class="fa fa-trash"></i></button>
           </td>
         </tr>
       `;
     }
   });
 
-  subtotalEl.textContent = formatPrice(totalMoney);
-  totalEl.textContent = formatPrice(totalMoney);
+  phanTuTamTinh.textContent = dinhDangGiaTien(tongTien);
+  phanTuTongTien.textContent = dinhDangGiaTien(tongTien);
 }
 
-// Hàm cập nhật số lượng (+ / -)
-function updateQty(index, change) {
-  const cart = getCart();
-  if (cart[index]) {
-    cart[index].qty += change;
-    if (cart[index].qty <= 0) {
-      cart.splice(index, 1); // Xóa nếu số lượng = 0
-    }
-    saveCart(cart);
-    loadCartPage(); // Render lại bảng
-  }
-}
+function taiTrangThanhToan() {
+  const vungDanhSach = document.getElementById("checkoutItemList");
+  const phanTuTamTinh = document.getElementById("checkoutSubtotal");
+  const phanTuTongTien = document.getElementById("checkoutTotal");
+  const phanTuTieuDe = document.getElementById("checkoutTitle");
+  if (!vungDanhSach) return;
 
-// Hàm xóa hẳn sản phẩm
-function removeItem(index) {
-  const cart = getCart();
-  cart.splice(index, 1);
-  saveCart(cart);
-  loadCartPage();
-}
+  const gioHang = layDuLieuGioHang();
+  vungDanhSach.innerHTML = "";
+  let tongTien = 0;
+  let tongSoLuong = 0;
 
-// =============================================
-// RENDER TRANG THANH TOÁN (checkout.html)
-// =============================================
-function loadCheckoutPage() {
-  const listContainer = document.getElementById("checkoutItemList");
-  const subtotalEl = document.getElementById("checkoutSubtotal");
-  const totalEl = document.getElementById("checkoutTotal");
-  const titleEl = document.getElementById("checkoutTitle");
-  if (!listContainer) return;
+  gioHang.forEach((monHang) => {
+    const sanPham = danhSachSanPham[monHang.id];
+    if (sanPham) {
+      const giaTien = chuyenGiaThanhSo(sanPham.gia);
+      const tienTungMon = giaTien * monHang.soLuong;
+      tongTien += tienTungMon;
+      tongSoLuong += monHang.soLuong;
 
-  const cart = getCart();
-  listContainer.innerHTML = "";
-  let totalMoney = 0;
-  let totalItems = 0;
-
-  cart.forEach((item) => {
-    const product = products[item.id];
-    if (product) {
-      const itemPrice = parsePrice(product.price);
-      const itemTotal = itemPrice * item.qty;
-      totalMoney += itemTotal;
-      totalItems += item.qty;
-
-      listContainer.innerHTML += `
+      vungDanhSach.innerHTML += `
         <div class="d-flex justify-content-between align-items-center mb-3">
           <div class="d-flex align-items-center gap-3">
-            <img src="${product.images[0]}" class="product-mini-img">
+            <img src="${sanPham.hinhAnh[0]}" class="product-mini-img">
             <div>
-              <h6 class="mb-0 fw-semibold text-truncate" style="max-width: 180px;">${product.name}</h6>
-              <small class="text-muted">SL: ${item.qty}</small>
+              <h6 class="mb-0 fw-semibold text-truncate" style="max-width: 180px;">${sanPham.ten}</h6>
+              <small class="text-muted">SL: ${monHang.soLuong}</small>
             </div>
           </div>
-          <span class="fw-semibold small">${formatPrice(itemTotal)}</span>
+          <span class="fw-semibold small">${dinhDangGiaTien(tienTungMon)}</span>
         </div>
       `;
     }
   });
 
-  titleEl.textContent = `Đơn hàng của bạn (${totalItems} sản phẩm)`;
-  subtotalEl.textContent = formatPrice(totalMoney);
-  totalEl.textContent = formatPrice(totalMoney);
+  phanTuTieuDe.textContent = `Đơn hàng của bạn (${tongSoLuong} sản phẩm)`;
+  phanTuTamTinh.textContent = dinhDangGiaTien(tongTien);
+  phanTuTongTien.textContent = dinhDangGiaTien(tongTien);
 }
-// =============================================
-// RENDER TRANG CHI TIẾT
-// =============================================
-function loadProduct(id) {
-  currentProductId = id;
-  const p = products[id];
-  if (!p) return;
 
-  // Cập nhật breadcrumb
-  document.getElementById("breadcrumbProduct").textContent = p.name;
+function taiChiTietSanPham(idSanPham) {
+  idSanPhamHienTai = idSanPham;
+  const sanPham = danhSachSanPham[idSanPham];
+  if (!sanPham) return;
 
-  // Cập nhật tên, giá
-  document.getElementById("productName").textContent = p.name;
-  document.getElementById("productPrice").textContent = p.price;
-  document.getElementById("productOldPrice").textContent = p.oldPrice;
-  document.getElementById("productDiscount").textContent = p.discount;
+  document.getElementById("breadcrumbProduct").textContent = sanPham.ten;
+  document.getElementById("productName").textContent = sanPham.ten;
+  document.getElementById("productPrice").textContent = sanPham.gia;
+  document.getElementById("productOldPrice").textContent = sanPham.giaCu;
+  document.getElementById("productDiscount").textContent = sanPham.giamGia;
+  document.getElementById("mainImg").src = sanPham.hinhAnh[0];
 
-  // Cập nhật ảnh chính
-  document.getElementById("mainImg").src = p.images[0];
-
-  // Render thumbnail
-  const thumbList = document.getElementById("thumbList");
-  thumbList.innerHTML = "";
-  p.images.forEach((src, i) => {
-    const img = document.createElement("img");
-    img.src = src;
-    img.alt = "Ảnh " + (i + 1);
-    if (i === 0) img.classList.add("active");
-    img.addEventListener("click", () => {
-      document.getElementById("mainImg").src = src;
+  const danhSachAnhThuNho = document.getElementById("thumbList");
+  danhSachAnhThuNho.innerHTML = "";
+  sanPham.hinhAnh.forEach((duongDan, viTri) => {
+    const anh = document.createElement("img");
+    anh.src = duongDan;
+    anh.alt = "Ảnh " + (viTri + 1);
+    if (viTri === 0) anh.classList.add("active");
+    anh.addEventListener("click", () => {
+      document.getElementById("mainImg").src = duongDan;
       document
         .querySelectorAll(".thumb-list img")
         .forEach((t) => t.classList.remove("active"));
-      img.classList.add("active");
+      anh.classList.add("active");
     });
-    thumbList.appendChild(img);
+    danhSachAnhThuNho.appendChild(anh);
   });
 
-  // Render bảng specs ngắn
-  renderSpecs("specsTable", p.specs);
-
-  // Render bảng specs đầy đủ
-  renderSpecs("fullSpecsTable", p.specs);
-
-  // Cuộn lên đầu
+  hienThiThongSo("specsTable", sanPham.thongSo);
+  hienThiThongSo("fullSpecsTable", sanPham.thongSo);
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-function renderSpecs(tableId, specs) {
-  const table = document.getElementById(tableId);
-  table.innerHTML = specs
-    .map(([key, val]) => `<tr><td>${key}</td><td>${val}</td></tr>`)
+function hienThiThongSo(idBang, thongSo) {
+  const bang = document.getElementById(idBang);
+  bang.innerHTML = thongSo
+    .map(([ten, giaTri]) => `<tr><td>${ten}</td><td>${giaTri}</td></tr>`)
     .join("");
 }
 
-// =============================================
-// GIỎ HÀNG
-// =============================================
-// Hàm hỗ trợ: Biến chuỗi "21.990.000đ" thành số nguyên 21990000 để cộng trừ
-function parsePrice(priceStr) {
-  return parseInt(priceStr.replace(/\D/g, ""));
-}
+function taiKetQuaTimKiem() {
+  const thamSo = new URLSearchParams(window.location.search);
+  const tuKhoa = thamSo.get("q");
 
-// Hàm hỗ trợ: Biến số nguyên 21990000 thành chuỗi "21.990.000đ"
-function formatPrice(priceNum) {
-  return priceNum.toLocaleString("vi-VN") + "đ";
-}
+  if (!tuKhoa) return;
 
-// Lấy giỏ hàng từ LocalStorage (nếu chưa có thì tạo mảng rỗng [])
-function getCart() {
-  return JSON.parse(localStorage.getItem("myCart")) || [];
-}
-
-// Lưu giỏ hàng xuống LocalStorage
-function saveCart(cart) {
-  localStorage.setItem("myCart", JSON.stringify(cart));
-  updateCartBadge(); // Lưu xong thì cập nhật số lượng trên icon menu luôn
-}
-
-// Cập nhật con số trên huy hiệu giỏ hàng (tổng số lượng sản phẩm)
-function updateCartBadge() {
-  const cart = getCart();
-  const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
-  const badge = document.getElementById("cartBadge");
-  if (badge) {
-    badge.textContent = totalItems;
-  }
-}
-
-// Hàm thêm sản phẩm vào giỏ
-function addToCart(productId) {
-  if (!productId) return;
-  const cart = getCart();
-
-  // Kiểm tra xem sản phẩm đã có trong giỏ chưa
-  const existingItem = cart.find((item) => item.id === productId);
-  if (existingItem) {
-    existingItem.qty += 1; // Có rồi thì tăng số lượng
-  } else {
-    cart.push({ id: productId, qty: 1 }); // Chưa có thì thêm mới
+  const phanTuHienThiTuKhoa = document.getElementById("searchKeywordDisplay");
+  if (phanTuHienThiTuKhoa) {
+    phanTuHienThiTuKhoa.textContent = `"${tuKhoa}"`;
   }
 
-  saveCart(cart);
-  showToast("✅ Đã thêm vào giỏ hàng!");
-}
+  const tuKhoaChuThuong = tuKhoa.toLowerCase();
+  const ketQuaTimKiem = [];
 
-// Hàm ấn Mua Ngay (Thêm vào giỏ rồi nhảy sang trang Giỏ hàng)
-function handleBuyNow(productId) {
-  if (!productId) {
-    // Nếu ở trang chi tiết mà không truyền id, tự lấy currentProductId
-    productId = currentProductId;
-  }
-
-  addToCart(productId);
-  // Chuyển hướng sang trang giỏ hàng
-  window.location.href = "cart.html";
-}
-
-function handleConsult() {
-  showToast("💬 Nhân viên sẽ liên hệ tư vấn cho bạn!");
-}
-
-function showToast(msg) {
-  const toastMsgEl = document.getElementById("toastMsg");
-  const toastEl = document.getElementById("cartToast");
-
-  if (toastMsgEl && toastEl) {
-    toastMsgEl.textContent = msg;
-    const toast = new bootstrap.Toast(toastEl, { delay: 2500 });
-    toast.show();
-  }
-}
-// =============================================
-// XỬ LÝ SLIDER SẢN PHẨM TRANG CHỦ
-// =============================================
-function initProductSlider() {
-  const slider = document.getElementById("productSlider");
-  const btnLeft = document.getElementById("btnScrollLeft");
-  const btnRight = document.getElementById("btnScrollRight");
-
-  // Rất quan trọng: Chỉ gắn sự kiện click nếu 3 phần tử này tồn tại trên trang
-  if (slider && btnLeft && btnRight) {
-    const scrollAmount = 400; // Chiều dài cuộn
-
-    btnLeft.addEventListener("click", function () {
-      slider.scrollBy({ left: -scrollAmount, behavior: "smooth" });
-    });
-
-    btnRight.addEventListener("click", function () {
-      slider.scrollBy({ left: scrollAmount, behavior: "smooth" });
-    });
-  }
-}
-// =============================================
-// =============================================
-// KHỞI CHẠY
-// =============================================
-document.addEventListener("DOMContentLoaded", () => {
-  // Luôn luôn cập nhật số giỏ hàng trên MỌI TRANG ngay khi vừa load xong
-  updateCartBadge();
-  // 2. Chạy slider trang chủ (nếu có)
-  initProductSlider();
-  // Chỉ chạy loadProduct nếu đang ở trang chitietsanpham.html
-  if (document.getElementById("productName")) {
-    const id = getProductIdFromURL();
-    loadProduct(id);
-  }
-  // MỚI: Nếu đang ở trang Giỏ hàng thì render bảng giỏ hàng
-  if (document.getElementById("cartTableBody")) {
-    loadCartPage();
-  }
-  // MỚI: Nếu đang ở trang Thanh toán thì render list tóm tắt
-  if (document.getElementById("checkoutItemList")) {
-    loadCheckoutPage();
-  }
-  // Kiểm tra nếu đang ở trang search.html thì chạy hàm lọc kết quả
-  if (
-    window.location.pathname.includes("search.html") ||
-    document.getElementById("searchResultsContainer")
-  ) {
-    loadSearchResults();
-  }
-});
-$(document).ready(function () {
-  // Bắt sự kiện khi người dùng nhấn nút "Tìm kiếm" hoặc gõ Enter
-  $("#searchForm").on("submit", function (e) {
-    e.preventDefault(); // Ngăn form tải lại trang theo mặc định
-
-    // Lấy giá trị người dùng nhập và xóa khoảng trắng ở hai đầu
-    var keyword = $("#searchInput").val().trim();
-
-    // Kiểm tra tính hợp lệ của dữ liệu (Testing point)
-    if (keyword !== "") {
-      // Mã hóa từ khóa để URL không bị lỗi nếu có ký tự đặc biệt hoặc tiếng Việt có dấu
-      var encodedKeyword = encodeURIComponent(keyword);
-
-      // Chuyển hướng sang trang search.html với biến 'q'
-      window.location.href = "search.html?q=" + encodedKeyword;
-    } else {
-      // Xử lý khi người dùng để trống
-      alert("Vui lòng nhập tên laptop bạn muốn tìm!");
-      $("#searchInput").focus(); // Đưa con trỏ chuột quay lại ô nhập liệu
-    }
-  });
-});
-// =============================================
-// XỬ LÝ TRANG TÌM KIẾM (search.html)
-// =============================================
-function loadSearchResults() {
-  // 1. Lấy từ khóa 'q' từ URL
-  const params = new URLSearchParams(window.location.search);
-  const query = params.get("q");
-
-  if (!query) return; // Nếu không có từ khóa thì bỏ qua
-
-  // In từ khóa ra thẻ <span> để người dùng biết họ đang tìm gì
-  const keywordDisplay = document.getElementById("searchKeywordDisplay");
-  if (keywordDisplay) {
-    keywordDisplay.textContent = `"${query}"`;
-  }
-
-  // 2. Lọc sản phẩm trong object products
-  const keywordLower = query.toLowerCase();
-  const searchResults = [];
-
-  // Duyệt qua các key (0, 1, 2, 3, 4) trong object products
-  for (const key in products) {
-    const product = products[key];
-    // Kiểm tra xem tên sản phẩm có chứa từ khóa không (không phân biệt hoa thường)
-    if (product.name.toLowerCase().includes(keywordLower)) {
-      searchResults.push({
-        id: key,
-        ...product,
+  for (const maSanPham in danhSachSanPham) {
+    const sanPham = danhSachSanPham[maSanPham];
+    if (sanPham.ten.toLowerCase().includes(tuKhoaChuThuong)) {
+      ketQuaTimKiem.push({
+        id: maSanPham,
+        ...sanPham,
       });
     }
   }
 
-  // 3. Hiển thị kết quả ra HTML
-  const resultsContainer = document.getElementById("searchResultsContainer");
-  const noResultBlock = document.getElementById("noResultBlock");
-  const resultCount = document.getElementById("resultCount");
+  const vungKetQua = document.getElementById("searchResultsContainer");
+  const vungKhongCoKetQua = document.getElementById("noResultBlock");
+  const phanTuDemSoLuong = document.getElementById("resultCount");
 
-  if (resultsContainer) {
-    resultsContainer.innerHTML = ""; // Xóa dữ liệu cũ (nếu có)
+  if (vungKetQua) {
+    vungKetQua.innerHTML = "";
 
-    if (searchResults.length > 0) {
-      // Có sản phẩm -> Ẩn block báo lỗi, hiện danh sách
-      if (noResultBlock) noResultBlock.classList.add("d-none");
-      if (resultCount)
-        resultCount.textContent = `(Tìm thấy ${searchResults.length} sản phẩm)`;
+    if (ketQuaTimKiem.length > 0) {
+      if (vungKhongCoKetQua) vungKhongCoKetQua.classList.add("d-none");
+      if (phanTuDemSoLuong)
+        phanTuDemSoLuong.textContent = `(Tìm thấy ${ketQuaTimKiem.length} sản phẩm)`;
 
-      // Tạo các thẻ HTML cho từng sản phẩm tìm được
-      searchResults.forEach((p) => {
-        const productHTML = `
+      ketQuaTimKiem.forEach((sp) => {
+        const theSanPham = `
           <div class="col-12 col-md-6 col-lg-3">
             <article class="card h-100 shadow-sm border-0 position-relative search-card bg-white">
-              <a href="chitietsanpham.html?id=${p.id}" style="text-decoration: none; color: inherit;">
-                <img src="${p.images[0]}" alt="${p.name}" class="card-img-top border-bottom p-3" style="height: 180px; object-fit: contain;" />
+              <a href="chitietsanpham.html?id=${sp.id}" style="text-decoration: none; color: inherit;">
+                <img src="${sp.hinhAnh[0]}" alt="${sp.ten}" class="card-img-top border-bottom p-3" style="height: 180px; object-fit: contain;" />
               </a>
               <div class="card-body d-flex flex-column">
                 <h4 class="card-title fs-6 fw-bold text-dark">
-                  <a href="chitietsanpham.html?id=${p.id}" class="text-decoration-none text-dark">
-                    ${p.name}
+                  <a href="chitietsanpham.html?id=${sp.id}" class="text-decoration-none text-dark">
+                    ${sp.ten}
                   </a>
                 </h4>
                 <p class="card-text text-muted small mb-3">
-                  ${p.specs[0][1]} </p>
+                  ${sp.thongSo[0][1]} </p>
                 <div class="mt-auto d-flex justify-content-between align-items-center">
-                  <span class="text-danger fw-bold">${p.price}</span>
-                  <button class="btn btn-success btn-sm fw-bold" onclick="handleBuyNow('${p.id}')">Mua ngay</button>
+                  <span class="text-danger fw-bold">${sp.gia}</span>
+                  <button class="btn btn-success btn-sm fw-bold" onclick="xuLyMuaNgay('${sp.id}')">Mua ngay</button>
                 </div>
               </div>
             </article>
           </div>
         `;
-        resultsContainer.innerHTML += productHTML;
+        vungKetQua.innerHTML += theSanPham;
       });
     } else {
-      // Không có sản phẩm -> Hiện block báo lỗi, cập nhật số lượng
-      if (noResultBlock) noResultBlock.classList.remove("d-none");
-      if (resultCount)
-        resultCount.textContent = `(Không tìm thấy sản phẩm nào)`;
+      if (vungKhongCoKetQua) vungKhongCoKetQua.classList.remove("d-none");
+      if (phanTuDemSoLuong)
+        phanTuDemSoLuong.textContent = `(Không tìm thấy sản phẩm nào)`;
     }
   }
 }
-// =============================================
-// XỬ LÝ TRANG DANH MỤC (category.html)
-// =============================================
-function loadCategoryResults() {
-  // 1. Lấy tham số 'type' từ URL (nếu không có thì mặc định là gaming)
-  const params = new URLSearchParams(window.location.search);
-  const type = params.get("type") || "gaming";
 
-  // 2. Đổi tiêu đề trang cho phù hợp
-  const titleEl = document.getElementById("categoryTitle");
-  if (titleEl) {
-    titleEl.textContent =
-      type === "office" ? "Laptop Văn phòng" : "Laptop Gaming";
+function taiKetQuaDanhMuc() {
+  const thamSo = new URLSearchParams(window.location.search);
+  const loaiSanPham = thamSo.get("type") || "gaming";
+
+  const phanTuTieuDe = document.getElementById("categoryTitle");
+  if (phanTuTieuDe) {
+    phanTuTieuDe.textContent =
+      loaiSanPham === "office" ? "Laptop Văn phòng" : "Laptop Gaming";
   }
+  const phanTuBreadcrumb = document.getElementById("breadcrumbCategory");
+  if (phanTuBreadcrumb) {
+    phanTuBreadcrumb.textContent =
+      loaiSanPham === "office" ? "Laptop Văn phòng" : "Laptop Gaming";
+  }
+  const vungChua = document.getElementById("categoryList");
+  if (!vungChua) return;
 
-  // 3. Lọc và render dữ liệu
-  const container = document.getElementById("categoryList");
-  if (!container) return;
+  vungChua.innerHTML = "";
+  let demSoLuong = 0;
 
-  container.innerHTML = ""; // Xóa rỗng trước khi bơm dữ liệu mới
-  let count = 0;
+  for (const maSanPham in danhSachSanPham) {
+    const sanPham = danhSachSanPham[maSanPham];
 
-  for (const key in products) {
-    const product = products[key];
-
-    // Nếu type của sản phẩm khớp với type trên URL thì mới hiển thị
-    if (product.type === type) {
-      count++;
-      const productHTML = `
+    if (sanPham.loai === loaiSanPham) {
+      demSoLuong++;
+      const theSanPham = `
         <div class="col-12 col-md-6 col-lg-4">
           <article class="product-item-card card h-100 bg-white shadow-sm border-0 position-relative">
-            <a href="chitietsanpham.html?id=${encodeURIComponent(key)}" style="text-decoration: none; color: inherit;">
-              <img src="${product.images[0]}" alt="${product.name}" class="card-img-top p-3 border-bottom" style="height: 180px; object-fit: contain;"/>
+            <a href="chitietsanpham.html?id=${encodeURIComponent(maSanPham)}" style="text-decoration: none; color: inherit;">
+              <img src="${sanPham.hinhAnh[0]}" alt="${sanPham.ten}" class="card-img-top p-3 border-bottom" style="height: 180px; object-fit: contain;"/>
             </a>
             <div class="card-body d-flex flex-column">
               <h4 class="card-title fs-6 fw-bold text-dark">
-                <a href="chitietsanpham.html?id=${encodeURIComponent(key)}" class="text-decoration-none text-dark">
-                  ${product.name}
+                <a href="chitietsanpham.html?id=${encodeURIComponent(maSanPham)}" class="text-decoration-none text-dark">
+                  ${sanPham.ten}
                 </a>
               </h4>
               <p class="card-text text-muted small mb-3">
-                 ${product.specs[0][1]} 
+                 ${sanPham.thongSo[0][1]} 
               </p>
               <div class="mt-auto d-flex justify-content-between align-items-center">
-                <span class="text-danger fw-bold">${product.price}</span>
-                <button class="btn btn-success btn-sm fw-bold" onclick="handleBuyNow('${key}')">Mua ngay</button>
+                <span class="text-danger fw-bold">${sanPham.gia}</span>
+                <button class="btn btn-success btn-sm fw-bold" onclick="xuLyMuaNgay('${maSanPham}')">Mua ngay</button>
               </div>
             </div>
           </article>
         </div>
       `;
-      container.innerHTML += productHTML;
+      vungChua.innerHTML += theSanPham;
     }
   }
 
-  // Cập nhật số lượng đếm vào tiêu đề
-  if (titleEl && count > 0) {
-    titleEl.textContent += ` (Hiển thị ${count} sản phẩm)`;
+  if (phanTuTieuDe && demSoLuong > 0) {
+    phanTuTieuDe.textContent += ` (Hiển thị ${demSoLuong} sản phẩm)`;
   }
 }
-// Kiểm tra nếu đang ở trang category.html thì chạy hàm lọc danh mục
-if (
-  window.location.pathname.includes("category.html") ||
-  document.getElementById("categoryList")
-) {
-  loadCategoryResults();
+
+// =============================================
+// HIỆU ỨNG GIAO DIỆN
+// =============================================
+function khoiTaoThanhTruotSanPham() {
+  const thanhTruot = document.getElementById("productSlider");
+  const nutTrai = document.getElementById("btnScrollLeft");
+  const nutPhai = document.getElementById("btnScrollRight");
+
+  if (thanhTruot && nutTrai && nutPhai) {
+    const khoangCachCuon = 400;
+
+    nutTrai.addEventListener("click", function () {
+      thanhTruot.scrollBy({ left: -khoangCachCuon, behavior: "smooth" });
+    });
+
+    nutPhai.addEventListener("click", function () {
+      thanhTruot.scrollBy({ left: khoangCachCuon, behavior: "smooth" });
+    });
+  }
+}
+
+function doiMauMenuHoatDong() {
+  const duongDanHienTai = window.location.href;
+  const cacLienKetMenu = document.querySelectorAll(".navbar-nav .nav-link");
+
+  cacLienKetMenu.forEach((lienKet) => {
+    lienKet.classList.remove("text-success", "active");
+  });
+
+  if (duongDanHienTai.includes("type=gaming")) {
+    const nutGaming = document.querySelector('a[href*="type=gaming"]');
+    if (nutGaming) nutGaming.classList.add("text-success", "active");
+  } else if (duongDanHienTai.includes("type=office")) {
+    const nutVanPhong = document.querySelector('a[href*="type=office"]');
+    if (nutVanPhong) nutVanPhong.classList.add("text-success", "active");
+  } else if (
+    !duongDanHienTai.includes("category.html") &&
+    !duongDanHienTai.includes("cart.html") &&
+    !duongDanHienTai.includes("chitietsanpham.html") &&
+    !duongDanHienTai.includes("search.html")
+  ) {
+    if (cacLienKetMenu[0])
+      cacLienKetMenu[0].classList.add("text-success", "active");
+  }
+}
+
+// =============================================
+// KHỞI CHẠY HỆ THỐNG
+// =============================================
+document.addEventListener("DOMContentLoaded", () => {
+  capNhatHuyHieuGioHang();
+  doiMauMenuHoatDong();
+  khoiTaoThanhTruotSanPham();
+
+  if (document.getElementById("productName")) {
+    const id = layIdSanPhamTuURL();
+    taiChiTietSanPham(id);
+  }
+  if (document.getElementById("cartTableBody")) {
+    taiTrangGioHang();
+  }
+  if (document.getElementById("checkoutItemList")) {
+    taiTrangThanhToan();
+  }
+  if (
+    window.location.pathname.includes("search.html") ||
+    document.getElementById("searchResultsContainer")
+  ) {
+    taiKetQuaTimKiem();
+  }
+  if (
+    window.location.pathname.includes("category.html") ||
+    document.getElementById("categoryList")
+  ) {
+    taiKetQuaDanhMuc();
+  }
+});
+
+$(document).ready(function () {
+  $("#searchForm").on("submit", function (suKien) {
+    suKien.preventDefault();
+    var tuKhoa = $("#searchInput").val().trim();
+
+    if (tuKhoa !== "") {
+      var tuKhoaDaMaHoa = encodeURIComponent(tuKhoa);
+      window.location.href = "search.html?q=" + tuKhoaDaMaHoa;
+    } else {
+      alert("Vui lòng nhập tên laptop bạn muốn tìm!");
+      $("#searchInput").focus();
+    }
+  });
+});
+
+function handleBuyNow(idSanPham) {
+  xuLyMuaNgay(idSanPham);
+}
+
+function handleConsult() {
+  xuLyTuVan();
 }
