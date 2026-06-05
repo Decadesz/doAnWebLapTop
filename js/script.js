@@ -127,6 +127,52 @@ function dinhDangGiaTien(soTien) {
 }
 
 // =============================================
+// CẬP NHẬT NAVBAR THEO TRẠNG THÁI ĐĂNG NHẬP
+// =============================================
+function capNhatNavbar() {
+  const isLoggedIn = localStorage.getItem("loggedIn") === "true";
+  const userName = localStorage.getItem("userName") || "Tài khoản";
+  const isAdmin = localStorage.getItem("isAdmin") === "true";
+  const khungDangNhap = document.getElementById("navAuthArea");
+  if (!khungDangNhap) return;
+
+  if (isLoggedIn) {
+    // Admin: tên có thể nhấp vào để vào trang admin
+    const tenHienThi = isAdmin
+      ? `<a href="admin.html" class="text-success fw-semibold small text-decoration-none" title="Vào trang quản trị">
+           <i class="fa fa-user-shield me-1"></i>Xin chào, ${userName}
+           <i class="fa fa-arrow-up-right-from-square ms-1" style="font-size:0.7rem;"></i>
+         </a>`
+      : `<span class="text-success fw-semibold small">
+           <i class="fa fa-circle-user me-1"></i>Xin chào, ${userName}
+         </span>`;
+
+    khungDangNhap.innerHTML = `
+      <div class="d-flex align-items-center gap-2">
+        ${tenHienThi}
+        <button class="btn btn-outline-danger btn-sm" onclick="dangXuat()">
+          <i class="fa fa-right-from-bracket me-1"></i>Đăng xuất
+        </button>
+      </div>
+    `;
+  } else {
+    // Hiện nút đăng nhập
+    khungDangNhap.innerHTML = `
+      <a href="dangnhap.html" class="btn btn-outline-secondary">
+        <i class="fa fa-right-to-bracket me-1"></i>Đăng nhập
+      </a>
+    `;
+  }
+}
+
+function dangXuat() {
+  localStorage.removeItem("loggedIn");
+  localStorage.removeItem("userName");
+  localStorage.removeItem("isAdmin");
+  window.location.href = "index.html";
+}
+
+// =============================================
 // QUẢN LÝ GIỎ HÀNG
 // =============================================
 function layDuLieuGioHang() {
@@ -512,6 +558,7 @@ function doiMauMenuHoatDong() {
 // =============================================
 document.addEventListener("DOMContentLoaded", () => {
   capNhatHuyHieuGioHang();
+  capNhatNavbar();
   doiMauMenuHoatDong();
   khoiTaoThanhTruotSanPham();
 
