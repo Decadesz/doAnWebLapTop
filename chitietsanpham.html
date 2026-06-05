@@ -397,6 +397,11 @@
             </h3>
           </div>
           <div class="col-12 col-md-6 col-lg-3">
+            <!-- Tham số id trên URL chính là key để tra cứu trong object danhSachSanPham (lưu toàn bộ dữ liệu sản phẩm trong script.js).
+             Ví dụ: id=MacBook Air M2 (2023) sẽ giúp script.js tìm ra đúng sản phẩm MacBook Air M2 (2023) để hiển thị chi tiết.
+             Cách này giúp chúng ta có thể dùng chung một template chitietsanpham.html cho tất cả sản phẩm, chỉ cần thay đổi id trên URL là được.
+             Khi người dùng nhấn vào một sản phẩm liên quan, cũng sẽ chuyển sang chitietsanpham.html với id tương ứng để hiển thị chi tiết sản phẩm đó.
+             Đây là cách đơn giản và hiệu quả để quản lý nhiều sản phẩm mà không cần tạo nhiều file HTML riêng biệt. -->
             <div
               class="related-card card h-100"
               onclick="
@@ -404,6 +409,7 @@
                   'chitietsanpham.html?id=MacBook Air M2 (2023)'
               "
             >
+          
               <img
                 src="images/MB1.png"
                 class="card-img-top"

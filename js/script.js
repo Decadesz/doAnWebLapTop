@@ -114,7 +114,9 @@ function capNhatHuyHieuGioHang() {
 }
 
 function layIdSanPhamTuURL() {
+  // Sử dụng URLSearchParams để lấy giá trị của tham số "id" từ URL, giúp xác định sản phẩm nào cần hiển thị chi tiết trên trang chitietsanpham.html
   const thamSo = new URLSearchParams(window.location.search);
+  // Giá trị của "id" sẽ được dùng làm key để tra cứu trong object danhSachSanPham, từ đó lấy ra thông tin chi tiết của sản phẩm cần hiển thị.
   return thamSo.get("id");
 }
 
@@ -134,6 +136,7 @@ function capNhatNavbar() {
   const userName = localStorage.getItem("userName") || "Tài khoản";
   const isAdmin = localStorage.getItem("isAdmin") === "true";
   const khungDangNhap = document.getElementById("navAuthArea");
+  // Nếu không tìm thấy phần tử khungDangNhap, dừng hàm để tránh lỗi khi cố gắng truy cập innerHTML của null.
   if (!khungDangNhap) return;
 
   if (isLoggedIn) {
@@ -143,10 +146,12 @@ function capNhatNavbar() {
            <i class="fa fa-user-shield me-1"></i>Xin chào, ${userName}
            <i class="fa fa-arrow-up-right-from-square ms-1" style="font-size:0.7rem;"></i>
          </a>`
+         // User thường: tên chỉ hiển thị không có link
       : `<span class="text-success fw-semibold small">
            <i class="fa fa-circle-user me-1"></i>Xin chào, ${userName}
          </span>`;
 
+    // Hiện tên người dùng và nút đăng xuất nếu đã đăng nhập, đồng thời phân biệt admin và user thường bằng cách hiển thị icon và link khác nhau.
     khungDangNhap.innerHTML = `
       <div class="d-flex align-items-center gap-2">
         ${tenHienThi}
@@ -157,18 +162,22 @@ function capNhatNavbar() {
     `;
   } else {
     // Hiện nút đăng nhập
+    // Nếu chưa đăng nhập, hiển thị nút "Đăng nhập" dẫn đến trang dangnhap.html để người dùng có thể đăng nhập vào hệ thống.
     khungDangNhap.innerHTML = `
-      <a href="dangnhap.html" class="btn btn-outline-secondary">
+      <a href="dangnhap.html" class="btn btn-outline-secondary"> 
         <i class="fa fa-right-to-bracket me-1"></i>Đăng nhập
       </a>
     `;
   }
 }
 
+// =============================================
 function dangXuat() {
+  // Xóa trạng thái đăng nhập khỏi localStorage để người dùng được coi là đã đăng xuất.
   localStorage.removeItem("loggedIn");
+   // Xóa tên người dùng khỏi localStorage vì khi đăng xuất sẽ không còn thông tin người dùng nào được lưu trữ. 
   localStorage.removeItem("userName");
-  localStorage.removeItem("isAdmin");
+  localStorage.removeItem("isAdmin"); // Xóa thông tin phân quyền admin khỏi localStorage để đảm bảo rằng sau khi đăng xuất, người dùng sẽ không còn quyền admin nào được lưu trữ.
   window.location.href = "index.html";
 }
 
@@ -176,10 +185,13 @@ function dangXuat() {
 // QUẢN LÝ GIỎ HÀNG
 // =============================================
 function layDuLieuGioHang() {
+  // Lấy dữ liệu giỏ hàng từ localStorage, nếu chưa có thì trả về mảng rỗng. 
+  // Dữ liệu giỏ hàng được lưu dưới dạng JSON string, nên cần parse lại thành object JavaScript để sử dụng.
   return JSON.parse(localStorage.getItem("gioHangCuaToi")) || [];
 }
 
 function luuDuLieuGioHang(gioHang) {
+  // Lưu dữ liệu giỏ hàng vào localStorage dưới dạng JSON string.
   localStorage.setItem("gioHangCuaToi", JSON.stringify(gioHang));
   capNhatHuyHieuGioHang();
 }
@@ -190,14 +202,15 @@ function themVaoGioHang(idSanPham) {
 
   const monHangDaCo = gioHang.find((monHang) => monHang.id === idSanPham);
   if (monHangDaCo) {
-    monHangDaCo.soLuong += 1;
+    monHangDaCo.soLuong += 1; // Nếu sản phẩm đã có trong giỏ, tăng số lượng lên 1
   } else {
-    gioHang.push({ id: idSanPham, soLuong: 1 });
+    gioHang.push({ id: idSanPham, soLuong: 1 }); // Nếu sản phẩm chưa có trong giỏ, thêm mới với số lượng 1
   }
 
   luuDuLieuGioHang(gioHang);
   hienThiThongBao("✅ Đã thêm vào giỏ hàng!");
 }
+
 
 function capNhatSoLuongSanPham(viTri, thayDoi) {
   const gioHang = layDuLieuGioHang();
@@ -212,8 +225,11 @@ function capNhatSoLuongSanPham(viTri, thayDoi) {
 }
 
 function xoaSanPhamKhoiGio(viTri) {
+  // Xóa sản phẩm khỏi giỏ hàng dựa trên vị trí (index) của sản phẩm trong mảng giỏ hàng.
   const gioHang = layDuLieuGioHang();
+  // Sử dụng splice để xóa phần tử tại vị trí viTri, với số lượng phần tử cần xóa là 1.
   gioHang.splice(viTri, 1);
+  // Sau khi xóa, lưu lại dữ liệu giỏ hàng mới vào localStorage và tải lại trang giỏ hàng để cập nhật giao diện.
   luuDuLieuGioHang(gioHang);
   taiTrangGioHang();
 }
@@ -222,6 +238,8 @@ function xuLyMuaNgay(idSanPham) {
   if (!idSanPham) {
     idSanPham = idSanPhamHienTai;
   }
+    // Khi người dùng nhấn "Mua ngay", sản phẩm sẽ được thêm vào giỏ hàng (nếu chưa có) hoặc tăng số lượng (nếu đã có), 
+  // sau đó chuyển thẳng đến trang giỏ hàng cart.html để người dùng tiến hành thanh toán.
   themVaoGioHang(idSanPham);
   window.location.href = "cart.html";
 }
@@ -341,44 +359,52 @@ function taiTrangThanhToan() {
 }
 
 function taiChiTietSanPham(idSanPham) {
-  idSanPhamHienTai = idSanPham;
-  const sanPham = danhSachSanPham[idSanPham];
-  if (!sanPham) return;
+  
+  idSanPhamHienTai = idSanPham;    // Lưu idSanPham vào biến toàn cục để có thể sử dụng lại khi người dùng nhấn "Mua ngay" mà không cần phải lấy lại từ URL
+  // Tra cứu thông tin sản phẩm trong object danhSachSanPham bằng idSanPham lấy từ URL để hiển thị chi tiết sản phẩm trên trang chitietsanpham.html
+  const sanPham = danhSachSanPham[idSanPham]; 
+  if (!sanPham) return; // Nếu không tìm thấy sản phẩm nào khớp với idSanPham, dừng hàm để tránh lỗi khi truy cập thuộc tính của undefined
 
+  // Gán thông tin văn bản
   document.getElementById("breadcrumbProduct").textContent = sanPham.ten;
   document.getElementById("productName").textContent = sanPham.ten;
   document.getElementById("productPrice").textContent = sanPham.gia;
   document.getElementById("productOldPrice").textContent = sanPham.giaCu;
   document.getElementById("productDiscount").textContent = sanPham.giamGia;
+  // Gán hình ảnh chính
   document.getElementById("mainImg").src = sanPham.hinhAnh[0];
 
+  // Render danh sách ảnh thu nhỏ và thêm sự kiện click để thay đổi ảnh chính khi người dùng nhấn vào ảnh thu nhỏ
   const danhSachAnhThuNho = document.getElementById("thumbList");
   danhSachAnhThuNho.innerHTML = "";
   sanPham.hinhAnh.forEach((duongDan, viTri) => {
     const anh = document.createElement("img");
     anh.src = duongDan;
     anh.alt = "Ảnh " + (viTri + 1);
-    if (viTri === 0) anh.classList.add("active");
+    if (viTri === 0) anh.classList.add("active"); // Mặc định ảnh đầu tiên được active
     anh.addEventListener("click", () => {
-      document.getElementById("mainImg").src = duongDan;
+      document.getElementById("mainImg").src = duongDan; // Cập nhật ảnh chính khi click vào ảnh thu nhỏ
       document
         .querySelectorAll(".thumb-list img")
         .forEach((t) => t.classList.remove("active"));
-      anh.classList.add("active");
+      anh.classList.add("active"); // Highlight thumbbnail đang được chọn
     });
     danhSachAnhThuNho.appendChild(anh);
   });
-
+  // Render bảng thông số kỹ thuật của sản phẩm, sử dụng hàm tiện ích để tạo các hàng trong bảng dựa trên mảng thongSo của sản phẩm
   hienThiThongSo("specsTable", sanPham.thongSo);
   hienThiThongSo("fullSpecsTable", sanPham.thongSo);
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  window.scrollTo({ top: 0, behavior: "smooth" }); // Cuộn về đầu trang khi tải chi tiết sản phẩm để người dùng có thể thấy ngay thông tin sản phẩm mà không cần phải cuộn tay
 }
 
+// Hàm tiện ích để hiển thị thông số kỹ thuật của sản phẩm trong bảng HTML, nhận vào id của bảng và mảng thông số (thông số là mảng các cặp [tên thông số, giá trị thông số])
 function hienThiThongSo(idBang, thongSo) {
   const bang = document.getElementById(idBang);
   bang.innerHTML = thongSo
     .map(([ten, giaTri]) => `<tr><td>${ten}</td><td>${giaTri}</td></tr>`)
     .join("");
+    //Giải thích: thongSo là mảng 2 chiều dạng [["CPU", "i7-12650H"], ["RAM", "16GB"], ...]. 
+    // Dùng .map() để chuyển mỗi phần tử thành một hàng <tr> trong bảng HTML, rồi .join("") để ghép lại thành chuỗi và gán vào innerHTML.
 }
 
 function taiKetQuaTimKiem() {
@@ -556,12 +582,16 @@ function doiMauMenuHoatDong() {
 // =============================================
 // KHỞI CHẠY HỆ THỐNG
 // =============================================
+// Khi nội dung trang đã được tải xong, hàm này sẽ được gọi để khởi tạo các thành phần giao diện như cập nhật huy hiệu giỏ hàng, 
+// cập nhật navbar theo trạng thái đăng nhập, thiết lập hiệu ứng menu hoạt động, khởi tạo thanh trượt sản phẩm, 
+// và kiểm tra xem đang ở trang nào để tải dữ liệu tương ứng (chi tiết sản phẩm, giỏ hàng, thanh toán, kết quả tìm kiếm, danh mục).
 document.addEventListener("DOMContentLoaded", () => {
   capNhatHuyHieuGioHang();
   capNhatNavbar();
   doiMauMenuHoatDong();
   khoiTaoThanhTruotSanPham();
-
+  // Kiểm tra nếu đang ở trang chi tiết sản phẩm (dựa trên sự tồn tại của phần tử có id "productName"), 
+  // nếu có thì lấy id sản phẩm từ URL và tải thông tin chi tiết sản phẩm đó để hiển thị trên trang.
   if (document.getElementById("productName")) {
     const id = layIdSanPhamTuURL();
     taiChiTietSanPham(id);

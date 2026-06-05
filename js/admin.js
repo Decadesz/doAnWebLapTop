@@ -35,18 +35,20 @@ function toggleAdminPw() {
 }
 
 function handleAdminLogin() {
-  const u = document.getElementById("adminUser").value.trim();
-  const p = document.getElementById("adminPw").value;
-  let ok = true;
+  // Lấy giá trị username từ input và loại bỏ khoảng trắng ở đầu và cuối để đảm bảo rằng người dùng không nhập chỉ khoảng trắng.
+  const u = document.getElementById("adminUser").value.trim(); 
+  // Mặc định mật khẩu có thể chứa khoảng trắng nên không trim() để tránh làm mất ký tự hợp lệ trong mật khẩu.
+  const p = document.getElementById("adminPw").value; 
+  let ok = true; 
 
-  document.getElementById("errUser").classList.remove("show");
-  document.getElementById("errPw").classList.remove("show");
+  document.getElementById("errUser").classList.remove("show"); // Ẩn thông báo lỗi tài khoản nếu có
+  document.getElementById("errPw").classList.remove("show"); 
 
-  if (!u) { document.getElementById("errUser").classList.add("show"); ok = false; }
-  if (!p) { document.getElementById("errPw").classList.add("show"); ok = false; }
+  if (!u) { document.getElementById("errUser").classList.add("show"); ok = false; } // Nếu username trống → báo lỗi "Vui lòng nhập tài khoản"
+  if (!p) { document.getElementById("errPw").classList.add("show"); ok = false; } // Nếu password trống → báo lỗi "Vui lòng nhập mật khẩu"
   if (!ok) return;
-
-  const acc = ADMIN_ACCOUNTS.find(a => a.username === u && a.password === p);
+  // Tìm tài khoản admin khớp với username và password đã nhập. Nếu không tìm thấy, acc sẽ là undefined.
+  const acc = ADMIN_ACCOUNTS.find(a => a.username === u && a.password === p); 
   if (!acc) {
     document.getElementById("errUser").textContent = "Tài khoản hoặc mật khẩu không đúng!";
     document.getElementById("errUser").classList.add("show");
@@ -55,20 +57,20 @@ function handleAdminLogin() {
     return;
   }
 
-  localStorage.setItem("adminLoggedIn", "true");
+  localStorage.setItem("adminLoggedIn", "true"); // Lưu trạng thái đăng nhập của admin vào localStorage để có thể kiểm tra ở các trang khác nếu cần.
   localStorage.setItem("adminName", acc.name);
   showAdminPanel(acc.name);
 }
-
+// Hiển thị bảng điều khiển admin sau khi đăng nhập thành công, đồng thời hiển thị tên admin ở góc trên bên phải.
 function showAdminPanel(name) {
-  document.getElementById("loginPage").style.display = "none";
-  document.getElementById("adminPage").style.display = "flex";
+  document.getElementById("loginPage").style.display = "none"; // Ẩn trang đăng nhập
+  document.getElementById("adminPage").style.display = "flex"; // Hiển thị trang admin
   document.getElementById("adminNameDisplay").textContent = name;
   document.getElementById("topbarUser").textContent = name;
   document.getElementById("adminAvatar").textContent = name.charAt(0).toUpperCase();
-  renderProducts(products);
-  renderOrders(orders);
-  startClock();
+  renderProducts(products); // Hiển thị danh sách sản phẩm mẫu trên bảng điều khiển admin.
+  renderOrders(orders); // Hiển thị danh sách đơn hàng mẫu trên bảng điều khiển admin.
+  startClock();// Bắt đầu đồng hồ hiển thị thời gian thực ở góc trên bên phải của bảng điều khiển admin.
 }
 
 function adminLogout() {
@@ -82,17 +84,22 @@ function adminLogout() {
 
 // ===== NAVIGATION =====
 function showPage(name, el) {
-  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  document.querySelectorAll(".sidebar-link").forEach(l => l.classList.remove("active"));
-  document.getElementById("page-" + name).classList.add("active");
-  el.classList.add("active");
+  // Ẩn tất cả các trang con (dashboard, products, orders) bằng cách xóa class "active" khỏi tất cả phần tử có class "page".
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active")); 
+  // Xóa class "active" khỏi tất cả các liên kết trong sidebar để đảm bảo rằng chỉ có liên kết của trang hiện tại được đánh dấu là active.
+  document.querySelectorAll(".sidebar-link").forEach(l => l.classList.remove("active")); 
+  document.getElementById("page-" + name).classList.add("active"); // Thêm class "active" vào phần tử của trang được chọn để hiển thị nó.
+  el.classList.add("active"); // Thêm class "active" vào liên kết sidebar được nhấp để đánh dấu nó là trang hiện tại.
   const titles = { dashboard:"Dashboard", products:"Quản lý sản phẩm", orders:"Quản lý đơn hàng" };
-  document.getElementById("topbarTitle").textContent = titles[name] || name;
+  // Cập nhật tiêu đề trên thanh topbar dựa trên trang hiện tại để người dùng biết họ đang ở đâu trong bảng điều khiển admin.
+  document.getElementById("topbarTitle").textContent = titles[name] || name; 
 }
 
 // ===== RENDER PRODUCTS =====
 function renderProducts(data) {
   const tbody = document.getElementById("productBody");
+  // Sử dụng phương thức map để tạo ra một chuỗi HTML cho mỗi sản phẩm trong mảng data, 
+  // sau đó gán chuỗi này vào innerHTML của tbody để hiển thị danh sách sản phẩm trên trang admin.
   tbody.innerHTML = data.map(p => `
     <tr>
       <td><img src="${p.img}" class="product-img-sm" onerror="this.style.display='none'"/></td>
@@ -109,9 +116,11 @@ function renderProducts(data) {
   `).join("");
 }
 
+// Lọc sản phẩm theo tên khi người dùng nhập từ khóa vào ô tìm kiếm. 
+// Hàm này sẽ được gọi mỗi khi người dùng nhập vào ô tìm kiếm để cập nhật danh sách sản phẩm hiển thị dựa trên từ khóa đã nhập.
 function filterProducts() {
   const kw = document.getElementById("searchProduct").value.toLowerCase();
-  renderProducts(products.filter(p => p.name.toLowerCase().includes(kw)));
+  renderProducts(products.filter(p => p.name.toLowerCase().includes(kw))); // Lọc sản phẩm dựa trên tên sản phẩm có chứa từ khóa đã nhập (không phân biệt chữ hoa chữ thường).
 }
 
 // ===== RENDER ORDERS =====
@@ -131,6 +140,8 @@ function renderOrders(data) {
   `).join("");
 }
 
+// Lọc đơn hàng theo ID hoặc tên khách hàng khi người dùng nhập từ khóa vào ô tìm kiếm.
+// Hàm này sẽ được gọi mỗi khi người dùng nhập vào ô tìm kiếm để cập nhật danh sách đơn hàng hiển thị dựa trên từ khóa đã nhập.
 function filterOrders() {
   const kw = document.getElementById("searchOrder").value.toLowerCase();
   const st = document.getElementById("filterStatus").value;
@@ -144,20 +155,23 @@ function filterOrders() {
 function startClock() {
   function tick() {
     const now = new Date();
+    // Cập nhật thời gian hiển thị ở góc trên bên phải của bảng điều khiển admin theo định dạng giờ:phút:giây.
     document.getElementById("topbarTime").textContent =
-      now.toLocaleTimeString("vi-VN", { hour:"2-digit", minute:"2-digit", second:"2-digit" });
+      now.toLocaleTimeString("vi-VN", { hour:"2-digit", minute:"2-digit", second:"2-digit" }); 
   }
-  tick(); setInterval(tick, 1000);
+  tick(); setInterval(tick, 1000); // Gọi hàm tick ngay lập tức để hiển thị thời gian ngay khi trang được tải, sau đó tiếp tục cập nhật thời gian mỗi giây.
 }
 
 // ===== INIT =====
 document.addEventListener("DOMContentLoaded", () => {
-  if (localStorage.getItem("adminLoggedIn") === "true") {
+  // Kiểm tra nếu admin đã đăng nhập trước đó bằng cách kiểm tra giá trị "adminLoggedIn" trong localStorage. 
+  // Nếu giá trị này là "true", có nghĩa là admin đã đăng nhập và chúng ta sẽ hiển thị bảng điều khiển admin thay vì trang đăng nhập.
+  if (localStorage.getItem("adminLoggedIn") === "true") { 
     const name = localStorage.getItem("adminName") || "Admin";
     showAdminPanel(name);
   }
-  document.addEventListener("keydown", e => {
-    if (e.key === "Enter" && document.getElementById("loginPage").style.display !== "none") {
+  document.addEventListener("keydown", e => { // Thêm sự kiện lắng nghe phím để cho phép admin nhấn Enter để đăng nhập nhanh chóng khi đang ở trang đăng nhập.
+    if (e.key === "Enter" && document.getElementById("loginPage").style.display !== "none") { // Chỉ xử lý khi đang ở trang đăng nhập (loginPage đang hiển thị).
       handleAdminLogin();
     }
   });
