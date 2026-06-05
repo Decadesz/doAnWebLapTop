@@ -1,6 +1,4 @@
-// =============================================
-// DỮ LIỆU SẢN PHẨM (Đã Việt hóa key)
-// =============================================
+// DỮ LIỆU SẢN PHẨM
 const danhSachSanPham = {
   "ASUS TUF Dash F15 (FX517ZC-HN079W)": {
     ten: "ASUS TUF Dash F15 (FX517ZC-HN079W)",
@@ -96,10 +94,8 @@ const danhSachSanPham = {
   },
 };
 
-// =============================================
 // BIẾN TOÀN CỤC & HÀM TIỆN ÍCH
-// =============================================
-let idSanPhamHienTai = 0;
+let idSanPhamHienTai = null;
 
 function capNhatHuyHieuGioHang() {
   const gioHang = layDuLieuGioHang();
@@ -126,9 +122,7 @@ function dinhDangGiaTien(soTien) {
   return soTien.toLocaleString("vi-VN") + "đ";
 }
 
-// =============================================
 // CẬP NHẬT NAVBAR THEO TRẠNG THÁI ĐĂNG NHẬP
-// =============================================
 function capNhatNavbar() {
   const isLoggedIn = localStorage.getItem("loggedIn") === "true";
   const userName = localStorage.getItem("userName") || "Tài khoản";
@@ -172,9 +166,7 @@ function dangXuat() {
   window.location.href = "index.html";
 }
 
-// =============================================
 // QUẢN LÝ GIỎ HÀNG
-// =============================================
 function layDuLieuGioHang() {
   return JSON.parse(localStorage.getItem("gioHangCuaToi")) || [];
 }
@@ -241,9 +233,8 @@ function hienThiThongBao(noiDung) {
   }
 }
 
-// =============================================
 // RENDER CÁC TRANG
-// =============================================
+//trang cart
 function taiTrangGioHang() {
   const thanBang = document.getElementById("cartTableBody");
   const phanTuTamTinh = document.getElementById("cartSubtotal");
@@ -299,7 +290,7 @@ function taiTrangGioHang() {
   phanTuTamTinh.textContent = dinhDangGiaTien(tongTien);
   phanTuTongTien.textContent = dinhDangGiaTien(tongTien);
 }
-
+//trang checkout
 function taiTrangThanhToan() {
   const vungDanhSach = document.getElementById("checkoutItemList");
   const phanTuTamTinh = document.getElementById("checkoutSubtotal");
@@ -339,7 +330,7 @@ function taiTrangThanhToan() {
   phanTuTamTinh.textContent = dinhDangGiaTien(tongTien);
   phanTuTongTien.textContent = dinhDangGiaTien(tongTien);
 }
-
+//trang chitietsanpham
 function taiChiTietSanPham(idSanPham) {
   idSanPhamHienTai = idSanPham;
   const sanPham = danhSachSanPham[idSanPham];
@@ -380,7 +371,7 @@ function hienThiThongSo(idBang, thongSo) {
     .map(([ten, giaTri]) => `<tr><td>${ten}</td><td>${giaTri}</td></tr>`)
     .join("");
 }
-
+//Trang search
 function taiKetQuaTimKiem() {
   const thamSo = new URLSearchParams(window.location.search);
   const tuKhoa = thamSo.get("q");
@@ -449,7 +440,7 @@ function taiKetQuaTimKiem() {
     }
   }
 }
-
+//trang category
 function taiKetQuaDanhMuc() {
   const thamSo = new URLSearchParams(window.location.search);
   const loaiSanPham = thamSo.get("type") || "gaming";
@@ -506,10 +497,7 @@ function taiKetQuaDanhMuc() {
     phanTuTieuDe.textContent += ` (Hiển thị ${demSoLuong} sản phẩm)`;
   }
 }
-
-// =============================================
 // HIỆU ỨNG GIAO DIỆN
-// =============================================
 function khoiTaoThanhTruotSanPham() {
   const thanhTruot = document.getElementById("productSlider");
   const nutTrai = document.getElementById("btnScrollLeft");
@@ -553,9 +541,7 @@ function doiMauMenuHoatDong() {
   }
 }
 
-// =============================================
 // KHỞI CHẠY HỆ THỐNG
-// =============================================
 document.addEventListener("DOMContentLoaded", () => {
   capNhatHuyHieuGioHang();
   capNhatNavbar();
